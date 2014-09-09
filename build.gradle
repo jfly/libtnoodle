@@ -65,6 +65,13 @@ model {
     }
 }
 
+// Task to build all executables that we are capable of building.
+task buildAllExecutables {
+    dependsOn binaries.withType(ExecutableBinary).matching {
+        it.buildable
+    }
+}
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.1'
