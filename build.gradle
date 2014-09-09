@@ -48,12 +48,19 @@ model {
         gcc(Gcc)
         mingw(Gcc) {
             target "windows_x64"
-            path "/usr/bin/"
             cCompiler.executable = "x86_64-w64-mingw32-gcc"
             cppCompiler.executable = "x86_64-w64-mingw32-g++"
             // http://stackoverflow.com/a/4981870
             linker.executable = "x86_64-w64-mingw32-g++"
             assembler.executable = "x86_64-w64-mingw32-as"
+        }
+        mingw(Gcc) {
+            target "windows_x86"
+            cCompiler.executable = "i686-w64-mingw32-gcc"
+            cppCompiler.executable = "i686-w64-mingw32-g++"
+            // http://stackoverflow.com/a/4981870
+            linker.executable = "i686-w64-mingw32-g++"
+            assembler.executable = "i686-w64-mingw32-as"
         }
     }
 }
