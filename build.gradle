@@ -1,0 +1,64 @@
+apply plugin: 'cpp'
+
+libraries {
+    tnoodle {}
+}
+
+executables {
+    main {}
+}
+
+sources {
+    main {
+        cpp {
+            lib libraries.tnoodle
+        }
+    }
+}
+
+// Ignore .swp files everywhere
+for(source in sources) {
+    source.cpp.source.excludes += "**/*.swp"
+}
+
+model {
+    platforms {
+        // For ease of development, my is a nice default that
+        // will figure out which architecture and
+        // operatingSystem we're on.
+        my {}
+        linux_x86 {
+            architecture "x86"
+            operatingSystem "linux"
+        }
+        linux_x64 {
+            architecture "x86_64"
+            operatingSystem "linux"
+        }
+        windows_x86 {
+            architecture "x86"
+            operatingSystem "windows"
+        }
+        windows_x64 {
+            architecture "x86_64"
+            operatingSystem "windows"
+        }
+    }
+    toolChains {
+        gcc(Gcc)
+        mingw(Gcc) {
+            target "windows_x64"
+            path "/usr/bin/"
+            cCompiler.executable = "x86_64-w64-mingw32-gcc"
+            cppCompiler.executable = "x86_64-w64-mingw32-g++"
+            // http://stackoverflow.com/a/4981870
+            linker.executable = "x86_64-w64-mingw32-g++"
+            assembler.executable = "x86_64-w64-mingw32-as"
+        }
+    }
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.1'
+}
