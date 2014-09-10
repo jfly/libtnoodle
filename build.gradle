@@ -1,6 +1,8 @@
 apply plugin: 'cpp'
 apply plugin: 'java'
 
+sourceCompatibility = 1.6
+
 libraries {
     tnoodle {}
     tnoodlejni {}
@@ -99,6 +101,7 @@ model {
             // http://stackoverflow.com/a/4981870
             linker.executable = "x86_64-w64-mingw32-g++"
             assembler.executable = "x86_64-w64-mingw32-as"
+            staticLibArchiver.executable = "x86_64-w64-mingw32-ar"
         }
         mingw(Gcc) {
             target "windows_x86"
@@ -107,6 +110,7 @@ model {
             // http://stackoverflow.com/a/4981870
             linker.executable = "i686-w64-mingw32-g++"
             assembler.executable = "i686-w64-mingw32-as"
+            staticLibArchiver.executable = "i686-w64-mingw32-ar"
         }
         all {
             cppCompiler.withArguments { args ->
