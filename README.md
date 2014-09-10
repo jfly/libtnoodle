@@ -4,7 +4,7 @@ libtnoodle
 An experimental c/c++ replacement for the scrambling guts of
 [cubing/tnoodle](https://github.com/cubing/tnoodle).
 
-** NOTHING IN HERE IS SANCTIONED BY THE WCA. NONE OF THIS MAY
+** NOTHING IN HERE IS SANCTIONED BY THE WCA. THIS MUST NOT
 BE USED FOR OFFICIAL WCA COMPETITIONS. **
 
 ## Compiling
