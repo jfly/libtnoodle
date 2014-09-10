@@ -1,7 +1,11 @@
 apply plugin: 'cpp'
+apply plugin: 'java'
+
+sourceCompatibility = 1.6
 
 libraries {
     tnoodle {}
+    tnoodlejni {}
 }
 
 executables {
@@ -14,11 +18,46 @@ sources {
             lib libraries.tnoodle
         }
     }
+    tnoodlejni {
+        cpp {
+            lib libraries.tnoodle.static
+        }
+    }
 }
-
 // Ignore .swp files everywhere
 for(source in sources) {
+    if(!source.hasProperty('cpp')) {
+        continue
+    }
     source.cpp.source.excludes += "**/*.swp"
+}
+
+sourceSets {
+    jtnoodle
+}
+
+jar {
+    from sourceSets.jtnoodle.output
+}
+
+// TODO - there must be a better way to get the headers directory
+// for jtnoodle. I couldn't find anything under
+// sources.jtnoodle.cpp.exportedHeaders, though.
+def nativeHeadersDir = file("$projectDir/src/tnoodlejni/headers")
+
+task nativeHeaders() {
+    def outputFile = file("$nativeHeadersDir/tnoodlejni.h")
+    inputs.files sourceSets.jtnoodle.output
+    outputs.file outputFile
+    doLast {
+        outputFile.parentFile.mkdirs()
+        exec {
+            executable org.gradle.internal.jvm.Jvm.current().getExecutable('javah')
+            args '-o', outputFile
+            args '-classpath', sourceSets.jtnoodle.output.classesDir
+            args 'JTNoodle'
+        }
+    }
 }
 
 model {
@@ -54,6 +93,7 @@ model {
     }
     toolChains {
         gcc(Gcc)
+        clang(Clang)
         mingw(Gcc) {
             target "windows_x64"
             cCompiler.executable = "x86_64-w64-mingw32-gcc"
@@ -61,6 +101,7 @@ model {
             // http://stackoverflow.com/a/4981870
             linker.executable = "x86_64-w64-mingw32-g++"
             assembler.executable = "x86_64-w64-mingw32-as"
+            staticLibArchiver.executable = "x86_64-w64-mingw32-ar"
         }
         mingw(Gcc) {
             target "windows_x86"
@@ -69,6 +110,16 @@ model {
             // http://stackoverflow.com/a/4981870
             linker.executable = "i686-w64-mingw32-g++"
             assembler.executable = "i686-w64-mingw32-as"
+            staticLibArchiver.executable = "i686-w64-mingw32-ar"
+        }
+        all {
+            cppCompiler.withArguments { args ->
+                args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
+            }
+            tasks.withType(CppCompile) { task ->
+                task.dependsOn nativeHeaders
+            }
         }
     }
 }
