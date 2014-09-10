@@ -1,0 +1,12 @@
+language: objective-c
+script:
+    - echo "HIYA!"
+    - uname -a
+    - ls
+    - pwd
+    - ./gradlew components
+    - ./gradlew installosx_x86MainExecutable
+    - ./gradlew installosx_x64MainExecutable
+    - build/install/mainExecutable/osx_x86/main
+    - build/install/mainExecutable/osx_x64/main
+    - echo "BIYA!"
