@@ -2,7 +2,8 @@ apply plugin: 'cpp'
 apply plugin: 'java'
 
 libraries {
-    libtnoodle {}
+    tnoodle {}
+    tnoodlejni {}
 }
 
 executables {
@@ -12,7 +13,12 @@ executables {
 sources {
     main {
         cpp {
-            lib libraries.libtnoodle
+            lib libraries.tnoodle
+        }
+    }
+    tnoodlejni {
+        cpp {
+            lib libraries.tnoodle.static
         }
     }
 }
@@ -32,11 +38,14 @@ jar {
     from sourceSets.jtnoodle.output
 }
 
-def nativeHeadersDir = file("$buildDir/nativeHeaders")
+// TODO - there must be a better way to get the headers directory
+// for jtnoodle. I couldn't find anything under
+// sources.jtnoodle.cpp.exportedHeaders, though.
+def nativeHeadersDir = file("$projectDir/src/tnoodlejni/headers")
 
-task nativeHeaders(dependsOn: jtnoodleClasses) {
-    def outputFile = file("$nativeHeadersDir/native.h")
-    inputs.files sourceSets.main.output
+task nativeHeaders() {
+    def outputFile = file("$nativeHeadersDir/tnoodlejni.h")
+    inputs.files sourceSets.jtnoodle.output
     outputs.file outputFile
     doLast {
         outputFile.parentFile.mkdirs()
@@ -98,6 +107,15 @@ model {
             // http://stackoverflow.com/a/4981870
             linker.executable = "i686-w64-mingw32-g++"
             assembler.executable = "i686-w64-mingw32-as"
+        }
+        all {
+            cppCompiler.withArguments { args ->
+                args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
+            }
+            tasks.withType(CppCompile) { task ->
+                task.dependsOn nativeHeaders
+            }
         }
     }
 }

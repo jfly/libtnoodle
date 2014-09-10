@@ -19,6 +19,9 @@ three operating systems, all from Linux or Travis CI. Right
 now, compilation to Windows works with MinGW, but the file
 extensions are wrong (no .exe and .so instead of .dll).
 
+- `./gradlew jtnoodleClasses` - compile jtnoodle
+- `./gradlew linux_x64tnoodlejniSharedLibrary` - compile shared library libjtnoodle.
+
 ## Components (under src/)
 
 - libtnoodle - A pure C/C++ library for generating scrambles. Produces
@@ -58,3 +61,5 @@ but I experimented with the NDK in
 - iOS (natively via Objective-C++) - Running Java in iOS is impossible. It
 should be easy to compile and run libtnoodle because it is written entirely in
 C++.
+
+LD_LIBRARY_PATH=build/binaries/tnoodlejniSharedLibrary/linux_x64 java -cp build/classes/jtnoodle Main
