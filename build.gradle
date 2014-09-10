@@ -54,6 +54,7 @@ model {
     }
     toolChains {
         gcc(Gcc)
+        clang(Clang)
         mingw(Gcc) {
             target "windows_x64"
             cCompiler.executable = "x86_64-w64-mingw32-gcc"
