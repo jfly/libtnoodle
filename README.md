@@ -1,7 +1,7 @@
 libtnoodle
 ==========
 
-An experimental c/c++ replacement for the scrambling guts of
+An experimental C/C++ replacement for the scrambling guts of
 [cubing/tnoodle](https://github.com/cubing/tnoodle).
 
 ** NOTHING IN HERE IS SANCTIONED BY THE WCA. THIS MUST NOT
@@ -34,7 +34,7 @@ extensions are wrong (no .exe and .so instead of .dll).
 
 This is an experiment. It remains to be seen how we're going to include a
 version of libtnoodle for every major operating system + architecture pair in
-jtnoodle.jar so that it *just works* (like the current pure Java TNoodle).
+jtnoodle.jar so that it *just works* (like the current pure Java tnoodle).
 
 If we succeed at producing a Java desktop app that can work everywhere, then
 we can declare this experiment a success, and start porting the Java scrambling code
