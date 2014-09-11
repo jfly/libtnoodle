@@ -8,10 +8,11 @@ script:
     - ./gradlew components
 
     - ./gradlew --info installosx_x64MainExecutable
-    - build/install/mainExecutable/osx_x86/main
+    - build/install/mainExecutable/osx_x64/main
 
     - ./gradlew --info jtnoodleClasses
     - ./gradlew --info osx_x64tnoodlejniSharedLibrary
+
     - cp build/binaries/tnoodlejniSharedLibrary/osx_x64/* build/classes/jtnoodle
     - ls build/classes/jtnoodle
     - (cd build/classes/jtnoodle; LD_LIBRARY_PATH=. java -cp . Main)
