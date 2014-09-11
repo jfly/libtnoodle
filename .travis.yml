@@ -4,9 +4,17 @@ script:
     - uname -a
     - ls
     - pwd
+
     - ./gradlew components
-    - ./gradlew installosx_x86MainExecutable
+
     - ./gradlew installosx_x64MainExecutable
     - build/install/mainExecutable/osx_x86/main
-    - build/install/mainExecutable/osx_x64/main
+
+    - ./gradlew jtnoodleClasses
+    - ./gradlew osx_x64tnoodlejniSharedLibrary
+    - cp build/binaries/tnoodlejniSharedLibrary/osx_x64/* build/classes/jtnoodle
+    - ls build/classes/jtnoodle
+    - (cd build/classes/jtnoodle; LD_LIBRARY_PATH=. java -cp . Main)
+
+
     - echo "BIYA!"
