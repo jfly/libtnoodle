@@ -9,18 +9,15 @@ BE USED FOR OFFICIAL WCA COMPETITIONS. **
 
 ## Compiling
 
-I'm trying out gradle for building, rather than a conventional
-Makefile. Run `./gradlew tasks` to see a list of commands you
-can run. Try out `./gradlew installmymainExecutable` followed
-by `build/install/mainExecutable/my/main`.
+A properly configured Linux machine can compile binaries for Linux, Windows, and OS X.
+Here's a (likely incomplete) list of dependencies.
 
-Current objective is to be able to cross-compile for the big
-three operating systems, all from Linux or Travis CI. Right
-now, compilation to Windows works with MinGW, but the file
-extensions are wrong (no .exe and .so instead of .dll).
+- gcc and the jdk are required to compile for Linux.
+- MinGW is required to compile to compile for Windows.
+- [https://github.com/tpoechtrager/osxcross](osxcross) needs to be set up to compile for OS X.
 
-- `./gradlew jtnoodleClasses` - compile jtnoodle
-- `./gradlew linux_x64tnoodlejniSharedLibrary` - compile shared library libjtnoodle.
+Once everything is setup, `./gradlew jar` will produce build/libs/libtnoodle.jar.
+`java -jar build/libs/libtnoodle.jar` should *just work*.
 
 ## Components (under src/)
 
@@ -61,5 +58,3 @@ but I experimented with the NDK in
 - iOS (natively via Objective-C++) - Running Java in iOS is impossible. It
 should be easy to compile and run libtnoodle because it is written entirely in
 C++.
-
-LD_LIBRARY_PATH=build/binaries/tnoodlejniSharedLibrary/linux_x64 java -cp build/classes/jtnoodle Main

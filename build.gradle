@@ -1,6 +1,10 @@
 apply plugin: 'cpp'
 apply plugin: 'java'
 
+archivesBaseName = 'jtnoodle'
+version = '0.1-SNAPSHOT'
+group = 'tk.tnoodle'
+
 sourceCompatibility = 1.6
 
 libraries {
@@ -36,10 +40,6 @@ sourceSets {
     jtnoodle
 }
 
-jar {
-    from sourceSets.jtnoodle.output
-}
-
 // TODO - there must be a better way to get the headers directory
 // for jtnoodle. I couldn't find anything under
 // sources.jtnoodle.cpp.exportedHeaders, though.
@@ -62,77 +62,117 @@ task nativeHeaders() {
 
 model {
     platforms {
-        // For ease of development, my is a nice default that
-        // will figure out which architecture and
-        // operatingSystem we're on.
-        my {}
+        // We're only targeting 64-bit binaries on OS X for now.
+        linux_x86_64 {
+            architecture "x86_64"
+            operatingSystem "linux"
+        }
         linux_x86 {
             architecture "x86"
             operatingSystem "linux"
         }
-        linux_x64 {
+        windows_x86_64 {
             architecture "x86_64"
-            operatingSystem "linux"
+            operatingSystem "windows"
         }
         windows_x86 {
             architecture "x86"
             operatingSystem "windows"
         }
-        windows_x64 {
-            architecture "x86_64"
-            operatingSystem "windows"
-        }
-        osx_x86 {
-            architecture "x86"
-            operatingSystem "osx"
-        }
-        osx_x64 {
+        osx_x86_64 {
             architecture "x86_64"
             operatingSystem "osx"
         }
     }
     toolChains {
         gcc(Gcc)
-        clang(Clang)
+        clang(Clang) // Needed for native OS X development
         mingw(Gcc) {
-            target "windows_x64"
-            cCompiler.executable = "x86_64-w64-mingw32-gcc"
-            cppCompiler.executable = "x86_64-w64-mingw32-g++"
-            // http://stackoverflow.com/a/4981870
-            linker.executable = "x86_64-w64-mingw32-g++"
-            assembler.executable = "x86_64-w64-mingw32-as"
-            staticLibArchiver.executable = "x86_64-w64-mingw32-ar"
+            target "windows_x86_64"
+            // Call to eachPlatform comes from
+            // https://github.com/gradle/gradle/commit/f0040d4520a748744c7f7bccf111ba2e1422e34f
+            eachPlatform {
+                cCompiler.executable = "x86_64-w64-mingw32-gcc"
+                cppCompiler.executable = "x86_64-w64-mingw32-g++"
+                // http://stackoverflow.com/a/4981870
+                linker.executable = "x86_64-w64-mingw32-g++"
+                assembler.executable = "x86_64-w64-mingw32-as"
+                staticLibArchiver.executable = "x86_64-w64-mingw32-ar"
+            }
         }
         mingw(Gcc) {
             target "windows_x86"
-            cCompiler.executable = "i686-w64-mingw32-gcc"
-            cppCompiler.executable = "i686-w64-mingw32-g++"
-            // http://stackoverflow.com/a/4981870
-            linker.executable = "i686-w64-mingw32-g++"
-            assembler.executable = "i686-w64-mingw32-as"
-            staticLibArchiver.executable = "i686-w64-mingw32-ar"
+            eachPlatform {
+                cCompiler.executable = "i686-w64-mingw32-gcc"
+                cppCompiler.executable = "i686-w64-mingw32-g++"
+                // http://stackoverflow.com/a/4981870
+                linker.executable = "i686-w64-mingw32-g++"
+                assembler.executable = "i686-w64-mingw32-as"
+                staticLibArchiver.executable = "i686-w64-mingw32-ar"
+            }
+        }
+        osxcross(Clang) {
+            target "osx_x86_64"
+            eachPlatform {
+                cCompiler.executable = "x86_64-apple-darwin11-clang"
+                cppCompiler.executable = "x86_64-apple-darwin11-clang++"
+                // http://stackoverflow.com/a/4981870
+                linker.executable = "x86_64-apple-darwin11-clang++"
+                assembler.executable = "x86_64-apple-darwin11-as"
+                staticLibArchiver.executable = "x86_64-apple-darwin11-ar"
+            }
         }
         all {
-            cppCompiler.withArguments { args ->
-                args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
-                args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
-                args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/darwin"
+            eachPlatform {
+                cppCompiler.withArguments { args ->
+                    args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
+                    args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/darwin"
+                }
             }
             tasks.withType(CppCompile) { task ->
                 task.dependsOn nativeHeaders
             }
+
         }
     }
 }
 
-// Task to build all executables that we are capable of building.
-task buildAllExecutables {
-    dependsOn binaries.withType(ExecutableBinary).matching {
+// Task to build all shared libraries that we are capable of building.
+task buildSharedLibraries {
+    dependsOn binaries.withType(SharedLibraryBinary).matching {
         it.buildable
     }
+    dependsOn jtnoodleClasses
 }
+
+task copySharedLibrariesToJava(type: Copy, dependsOn: buildSharedLibraries) {
+    from {
+        libraries.tnoodlejni.binaries.withType(SharedLibraryBinary).collect {
+            def containingFolder = it.sharedLibraryFile.getParentFile()
+            fileTree(dir: containingFolder.getParentFile(),
+                     include: containingFolder.getName() + "/**")
+        }
+    }
+    into new File(sourceSets.jtnoodle.output.classesDir, "/native/")
+}
+
+task run(type: JavaExec, dependsOn: copySharedLibrariesToJava) {
+    main = "Main"
+    classpath = sourceSets.jtnoodle.runtimeClasspath
+}
+
+jar {
+    from sourceSets.jtnoodle.output
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+}
+jar.dependsOn copySharedLibrariesToJava
 
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.1'
+    // We need a version of gradle with
+    // https://github.com/gradle/gradle/commit/0cd1cff47d044f038db61287c4d9e0fd93691951
+    gradleVersion = '2.2-20140911220012+0000'
 }
