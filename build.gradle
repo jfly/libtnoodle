@@ -60,6 +60,27 @@ task nativeHeaders() {
     }
 }
 
+def exists(bin) {
+    ByteArrayOutputStream stdOut = new ByteArrayOutputStream()
+    def r = exec {
+        commandLine = [
+            "bash", "-c", "which ${bin} 2>&1"
+        ]
+        standardOutput = stdOut
+        ignoreExitValue = true
+    }
+    if(r.exitValue == 0) {
+        // which found the file
+        return true
+    } else if(r.exitValue == 1) {
+        // which failed to find the file
+        return false
+    } else {
+        // Some other error occurred while invoking bash
+        throw new GradleScriptException(stdOut.toString(), null)
+    }
+}
+
 model {
     platforms {
         // We're only targeting 64-bit binaries on OS X for now.
@@ -87,39 +108,47 @@ model {
     toolChains {
         gcc(Gcc)
         clang(Clang) // Needed for native OS X development
-        mingw(Gcc) {
-            target "windows_x86_64"
-            // Call to eachPlatform comes from
-            // https://github.com/gradle/gradle/commit/f0040d4520a748744c7f7bccf111ba2e1422e34f
-            eachPlatform {
-                cCompiler.executable = "x86_64-w64-mingw32-gcc"
-                cppCompiler.executable = "x86_64-w64-mingw32-g++"
-                // http://stackoverflow.com/a/4981870
-                linker.executable = "x86_64-w64-mingw32-g++"
-                assembler.executable = "x86_64-w64-mingw32-as"
-                staticLibArchiver.executable = "x86_64-w64-mingw32-ar"
+
+        if(exists("x86_64-w64-mingw32-gcc")) {
+            mingw(Gcc) {
+                target "windows_x86_64"
+                // Call to eachPlatform comes from
+                // https://github.com/gradle/gradle/commit/f0040d4520a748744c7f7bccf111ba2e1422e34f
+                eachPlatform {
+                    cCompiler.executable = "x86_64-w64-mingw32-gcc"
+                    cppCompiler.executable = "x86_64-w64-mingw32-g++"
+                    // http://stackoverflow.com/a/4981870
+                    linker.executable = "x86_64-w64-mingw32-g++"
+                    assembler.executable = "x86_64-w64-mingw32-as"
+                    staticLibArchiver.executable = "x86_64-w64-mingw32-ar"
+                }
             }
         }
-        mingw(Gcc) {
-            target "windows_x86"
-            eachPlatform {
-                cCompiler.executable = "i686-w64-mingw32-gcc"
-                cppCompiler.executable = "i686-w64-mingw32-g++"
-                // http://stackoverflow.com/a/4981870
-                linker.executable = "i686-w64-mingw32-g++"
-                assembler.executable = "i686-w64-mingw32-as"
-                staticLibArchiver.executable = "i686-w64-mingw32-ar"
+        if(exists("i686-w64-mingw32-gcc")) {
+            mingw(Gcc) {
+                target "windows_x86"
+                eachPlatform {
+                    cCompiler.executable = "i686-w64-mingw32-gcc"
+                    cppCompiler.executable = "i686-w64-mingw32-g++"
+                    // http://stackoverflow.com/a/4981870
+                    linker.executable = "i686-w64-mingw32-g++"
+                    assembler.executable = "i686-w64-mingw32-as"
+                    staticLibArchiver.executable = "i686-w64-mingw32-ar"
+                }
             }
         }
-        osxcross(Clang) {
-            target "osx_x86_64"
-            eachPlatform {
-                cCompiler.executable = "x86_64-apple-darwin11-clang"
-                cppCompiler.executable = "x86_64-apple-darwin11-clang++"
-                // http://stackoverflow.com/a/4981870
-                linker.executable = "x86_64-apple-darwin11-clang++"
-                assembler.executable = "x86_64-apple-darwin11-as"
-                staticLibArchiver.executable = "x86_64-apple-darwin11-ar"
+
+        if(exists("x86_64-apple-darwin11-clang")) {
+            osxcross(Clang) {
+                target "osx_x86_64"
+                eachPlatform {
+                    cCompiler.executable = "x86_64-apple-darwin11-clang"
+                    cppCompiler.executable = "x86_64-apple-darwin11-clang++"
+                    // http://stackoverflow.com/a/4981870
+                    linker.executable = "x86_64-apple-darwin11-clang++"
+                    assembler.executable = "x86_64-apple-darwin11-as"
+                    staticLibArchiver.executable = "x86_64-apple-darwin11-ar"
+                }
             }
         }
         all {
