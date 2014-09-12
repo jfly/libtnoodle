@@ -1,4 +1,4 @@
-libtnoodle
+libtnoodle [![Build Status](https://travis-ci.org/jfly/libtnoodle.svg?branch=master)](https://travis-ci.org/jfly/libtnoodle)
 ==========
 
 An experimental C/C++ replacement for the scrambling guts of
