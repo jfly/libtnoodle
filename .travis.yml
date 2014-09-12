@@ -1,25 +1,4 @@
-language: objective-c
+language: java
 script:
-    - echo "HIYA!"
-    - uname -a
-    - ls
-    - pwd
-
-    - mdfind jni_md.h
-    - find /Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home/include/
-    - find /System/Library/Frameworks/JavaVM.framework/Headers
-
-    - ./gradlew components
-
-    - ./gradlew --info installosx_x64MainExecutable
-    - build/install/mainExecutable/osx_x64/main
-
-    - ./gradlew --info jtnoodleClasses
-    - ./gradlew --info osx_x64tnoodlejniSharedLibrary
-
-    - cp build/binaries/tnoodlejniSharedLibrary/osx_x64/* build/classes/jtnoodle
-    - ls build/classes/jtnoodle
-    - (cd build/classes/jtnoodle; LD_LIBRARY_PATH=. java -cp . Main)
-
-
-    - echo "BIYA!"
+    - ./gradlew jar
+    - java -jar build/libs/jtnoodle-0.1-SNAPSHOT.jar
