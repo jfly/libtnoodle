@@ -1,7 +1,10 @@
 language: java
+jdk:
+    - openjdk6
 before_install:
     # From http://stackoverflow.com/a/9004026
-    - sudo ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
+    #- sudo ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
+    - sudo apt-get install ia32-libs
 script:
     - ./gradlew jar
     - java -jar build/libs/jtnoodle-0.1-SNAPSHOT.jar
