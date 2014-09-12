@@ -109,7 +109,7 @@ model {
         gcc(Gcc)
         clang(Clang) // Needed for native OS X development
 
-        if(exists("x86_64-w64-mingw32-gcc")) {
+        if(exists("x86_64-w64-mingw32-g++")) {
             mingw(Gcc) {
                 target "windows_x86_64"
                 // Call to eachPlatform comes from
@@ -124,7 +124,7 @@ model {
                 }
             }
         }
-        if(exists("i686-w64-mingw32-gcc")) {
+        if(exists("i686-w64-mingw32-g++")) {
             mingw(Gcc) {
                 target "windows_x86"
                 eachPlatform {
@@ -138,7 +138,7 @@ model {
             }
         }
 
-        if(exists("x86_64-apple-darwin11-clang")) {
+        if(exists("x86_64-apple-darwin11-clang++")) {
             osxcross(Clang) {
                 target "osx_x86_64"
                 eachPlatform {
