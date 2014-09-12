@@ -1,4 +1,7 @@
 language: java
+before_install:
+    # From http://stackoverflow.com/a/9004026
+    - sudo ln -s /usr/lib/x86_64-linux-gnu /usr/lib64
 script:
     - ./gradlew jar
     - java -jar build/libs/jtnoodle-0.1-SNAPSHOT.jar
