@@ -9,6 +9,14 @@ before_install:
     - sudo aptitude install -y libc6-dev-i386 lib32stdc++6 gcc-multilib g++-multilib
     # To compile 32-bit and 64-bit Windows binaries.
     - sudo aptitude install -y g++-mingw-w64
+    # To compile for OS X, we need osxcross.
+    - git clone --depth=1 https://github.com/tpoechtrager/osxcross
+    - cd osxcross
+    - (cd tarballs; wget https://dl.dropboxusercontent.com/u/1463845/osxcross/MacOSX10.7.sdk.tar.bz2)
+    - sudo tools/get_dependencies.sh
+    - yes | ./build.sh
+    - eval `target/bin/osxcross-env`
+    - cd ..
 script:
     - ./gradlew jar
     - java -jar build/libs/jtnoodle-0.1-SNAPSHOT.jar
