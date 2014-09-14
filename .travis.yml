@@ -1,6 +1,9 @@
 language: java
 jdk:
     - openjdk6
+env:
+   # From http://stackoverflow.com/a/21841688
+   - TERM=dumb
 before_install:
     # From http://stackoverflow.com/a/11069162
     - sudo apt-get update
