@@ -1,8 +1,12 @@
+plugins {
+    id "com.jfrog.artifactory" version "3.0.1"
+}
 apply plugin: 'cpp'
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 archivesBaseName = 'jtnoodle'
-version = '0.1-SNAPSHOT'
+version = '0.0.1-SNAPSHOT'
 group = 'tk.tnoodle'
 
 sourceCompatibility = 1.6
@@ -200,6 +204,84 @@ jar {
     }
 }
 jar.dependsOn copySharedLibrariesToJava
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.jtnoodle.java.srcDirs
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            // Produce jtnoodle.jar instead of libtnoodle.jar
+            artifactId "jtnoodle"
+            from components.java
+            artifact sourcesJar {
+                classifier "sources"
+            }
+            pom.withXml {
+                // Trick from
+                // http://mike-neck.github.io/blog/2013/06/21/how-to-publish-artifacts-with-gradle-maven-publish-plugin-version-1-dot-6/
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'jtnoodle'
+                    description 'Scrambling software for WCA competitions'
+                    url 'https://github.com/jfly/libtnoodle'
+                    scm {
+                        url 'https://github.com/jfly/libtnoodle'
+                        connection 'https://github.com/jfly/libtnoodle.git'
+                        developerConnection 'git@github.com:jfly/libtnoodle.git'
+                    }
+                    licenses {
+                        license {
+                            name 'GNU General Public License, Version 3'
+                            url 'http://www.gnu.org/licenses/gpl-3.0-standalone.html'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'jfly'
+                            name 'Jeremy Fleischman'
+                            email 'jeremyfleischman@gmail.com'
+                        }
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "$buildDir/repo"
+        }
+    }
+}
+
+
+artifactory {
+    contextUrl = "http://oss.jfrog.org/artifactory"
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+            maven = true
+        }
+        defaults {
+            //This closure defines defaults for all 'artifactoryPublish' tasks
+            // of all projects the plugin is applied to
+            publications ('mavenJava')
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'libs-release'
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+            maven = true
+        }
+    }
+}
 
 
 task wrapper(type: Wrapper) {

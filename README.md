@@ -19,6 +19,16 @@ Here's a (likely incomplete) list of dependencies.
 Once everything is setup, `./gradlew jar` will produce build/libs/libtnoodle.jar.
 `java -jar build/libs/libtnoodle.jar` should *just work*.
 
+## Releasing
+
+- `./gradlew artifactoryPublish` will upload a jtnoodle to
+  http://oss.jfrog.org/oss-snapshot-local/tk/tnoodle/. See
+  [jtnoodle-demo](https://github.com/jfly/jtnoodle-demo) for an example
+  project that uses jtnoodle.
+
+Later on, we can investigate deploying to `oss-release-local` and promoting
+releases to jcenter.
+
 ## Components (under src/)
 
 - libtnoodle - A pure C/C++ library for generating scrambles. Produces
