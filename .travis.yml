@@ -2,11 +2,12 @@ language: java
 jdk:
     - openjdk6
 env:
-    # From http://stackoverflow.com/a/21841688
-    - TERM=dumb artifactory_user=jfly
-secure:
-    # Setting the artifactory_password env var
-    - "B6YKTyHSIYi/y5Ui2w0nBnuPlTiBePHEHT244/Gu2IKWAMG8JGn4/LfZo1aW1ms/D7y/NmkhfgK+KrS8Gslkwkh4D+6uyiRtgOnGMMamic6KEw8Fu53xZH9mt9XNLIOg1Uz3Cc1dl2bj8RuvgPV+0R7PV5mSphqk2FDzmxnzQtY="
+    global:
+        # From http://stackoverflow.com/a/21841688
+        - TERM=dumb
+        - artifactory_user=jfly
+        # Setting the artifactory_password env var
+        - secure: "FoHtXIssO2aUIQLynoQE8WQ//smX1dmDF+JBLAM5nYbiSSQddzazuLDnQjmLV8F7FpH1yjq5jSyn985y622uaWMKtGTLVgil+XELUZJcHxG3Tvff+Wit3GAOkkD/XVF1XRYnIRx1IpCD2ZLzlnUvGOFc5f9+irl/6rXqWIayA1c="
 before_install:
     #<<<
     - env
