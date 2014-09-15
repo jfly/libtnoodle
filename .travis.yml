@@ -25,7 +25,5 @@ before_install:
     - eval `target/bin/osxcross-env`
     - cd ..
 script:
-    - ./gradlew jar
-    - java -jar build/libs/jtnoodle-0.0.1-SNAPSHOT.jar
-    # Publish to oss.jfrog.org
+    # Build and publish to oss.jfrog.org
     - ./gradlew artifactoryPublish
