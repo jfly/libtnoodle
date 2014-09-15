@@ -6,8 +6,11 @@ env:
     - TERM=dumb artifactory_user=jfly
 secure:
     # Setting the artifactory_password env var
-    - "S25NndSb6X5d5h7d8UbUrAZc4xzB4qiOWgulwHym+U0MnaswNKrLzAOkvYiBZjicY5BaaT6CB8+oZ8+BUeU0KuPIspasp3HqcLoWcLX9YUWa4g0/6VMb2PBa4DnZtRC4z4AJhXERePhjNo0J8pqI6pAhAOG7Nl20aa7CpxfCWJQ="
+    - "B6YKTyHSIYi/y5Ui2w0nBnuPlTiBePHEHT244/Gu2IKWAMG8JGn4/LfZo1aW1ms/D7y/NmkhfgK+KrS8Gslkwkh4D+6uyiRtgOnGMMamic6KEw8Fu53xZH9mt9XNLIOg1Uz3Cc1dl2bj8RuvgPV+0R7PV5mSphqk2FDzmxnzQtY="
 before_install:
+    #<<<
+    - env
+    #<<<
     # From http://stackoverflow.com/a/11069162
     - sudo apt-get update
     - sudo apt-get install aptitude
@@ -25,9 +28,6 @@ before_install:
     - cd ..
 script:
     - ./gradlew jar
-    #<<<
-    - find build
-    #<<<
     - java -jar build/libs/jtnoodle-0.0.1-SNAPSHOT.jar
     # Publish to oss.jfrog.org
     - ./gradlew artifactoryPublish
