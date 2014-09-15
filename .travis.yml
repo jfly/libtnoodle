@@ -7,11 +7,8 @@ env:
         - TERM=dumb
         - artifactory_user=jfly
         # Setting the artifactory_password env var
-        - secure: "FoHtXIssO2aUIQLynoQE8WQ//smX1dmDF+JBLAM5nYbiSSQddzazuLDnQjmLV8F7FpH1yjq5jSyn985y622uaWMKtGTLVgil+XELUZJcHxG3Tvff+Wit3GAOkkD/XVF1XRYnIRx1IpCD2ZLzlnUvGOFc5f9+irl/6rXqWIayA1c="
+        - secure: "bsAUSuyK5j7CvTtuGhYZlvg3KIz7vQKtPVae7hkYfRbWUJRUs+XO/1KEYqZajVsBNTHItN6uTr64t5MF9PExYA0smJLtYzBGjrejlB1Z7V14d7+1mvqE1luI9OtrEG713v9UTGN4Pa5OXpHBvpJTcsT/ep6IkfkXcLVUF64JOwY="
 before_install:
-    #<<<
-    - env
-    #<<<
     # From http://stackoverflow.com/a/11069162
     - sudo apt-get update
     - sudo apt-get install aptitude
