@@ -7,6 +7,11 @@ An experimental C/C++ replacement for the scrambling guts of
 ** NOTHING IN HERE IS SANCTIONED BY THE WCA. THIS MUST NOT
 BE USED FOR OFFICIAL WCA COMPETITIONS. **
 
+## How to use
+
+See [jtnoodle-demo](https://github.com/jfly/jtnoodle-demo) for an example
+project that uses jtnoodle.
+
 ## Compiling
 
 A properly configured Linux machine can compile binaries for Linux, Windows, and OS X.
@@ -21,12 +26,10 @@ Once everything is setup, `./gradlew jar` will produce build/libs/libtnoodle.jar
 
 ## Releasing
 
-- `./gradlew artifactoryPublish` will upload a jtnoodle to
-  http://oss.jfrog.org/oss-snapshot-local/tk/tnoodle/. See
-  [jtnoodle-demo](https://github.com/jfly/jtnoodle-demo) for an example
-  project that uses jtnoodle.
+Travis CI is configured to publish to
+http://oss.jfrog.org/oss-snapshot-local/tk/tnoodle/ on each build.
 
-Later on, we can investigate deploying to `oss-release-local` and promoting
+We could investigate manual deployment to `oss-release-local` and promoting
 releases to jcenter.
 
 ## Components (under src/)

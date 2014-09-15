@@ -257,6 +257,19 @@ publishing {
     }
 }
 
+def ENV = System.getenv()
+def artifactory_user = null
+if(hasProperty('artifactory_user')) {
+    artifactory_user = property('artifactory_user')
+} else {
+    artifactory_user = ENV['artifactory_user']
+}
+def artifactory_password = null
+if(hasProperty('artifactory_password')) {
+    artifactory_password = property('artifactory_password')
+} else {
+    artifactory_password = ENV['artifactory_password']
+}
 
 artifactory {
     contextUrl = "http://oss.jfrog.org/artifactory"
