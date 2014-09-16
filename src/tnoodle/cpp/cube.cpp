@@ -1,3 +1,5 @@
+#include <random>
+
 #include "cube.h"
 
 namespace tnoodle {
@@ -19,6 +21,16 @@ int Cube::getWcaNotSolvableInLtFilter() {
 }
 
 char *Cube::generateFilteredSeededScramble(int notSolvableInLt, int64_t seed) {
+    // TODO - there's probably a nicer way to do this...
+    std::mt19937 *r = NULL;
+    if(seed == 0) {
+        static std::mt19937 rand; // TODO - seed from something truly random, such as random_device
+        r = &rand;
+    } else {
+        std::mt19937 rand(seed);
+        r = &rand;
+    }
+    printf("yo! generateFilteredSeededScramble %d\n", (*r)());//<<<
     return "R2 R2 R2";//<<< TODO - put in heap?
 }
 

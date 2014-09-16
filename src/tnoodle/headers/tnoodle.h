@@ -47,25 +47,17 @@ char *tnoodle_generateFilteredSeededScramble(int puzzleId, int notSolvableInLt, 
 /*
  * Delegates to tnoodle_generateFilteredSeededScramble()
  */
-inline char *tnoodle_generateFilteredScramble(int puzzleId, int notSolvableInLt) {
-    return tnoodle_generateFilteredSeededScramble(puzzleId, notSolvableInLt, 0);
-}
+char *tnoodle_generateFilteredScramble(int puzzleId, int notSolvableInLt);
 
 /*
  * Delegates to tnoodle_generateFilteredSeededScramble()
  */
-inline char *tnoodle_generateSeededScramble(int puzzleId, int64_t seed) {
-    int filter = tnoodle_getWcaNotSolvableInLtFilter(puzzleId);
-    return tnoodle_generateFilteredSeededScramble(puzzleId, filter, seed);
-}
+char *tnoodle_generateSeededScramble(int puzzleId, int64_t seed);
 
 /*
  * Delegates to tnoodle_generateFilteredSeededScramble()
  */
-inline char *tnoodle_generateScramble(int puzzleId) {
-    int filter = tnoodle_getWcaNotSolvableInLtFilter(puzzleId);
-    return tnoodle_generateFilteredSeededScramble(puzzleId, filter, 0);
-}
+char *tnoodle_generateScramble(int puzzleId);
 
 /*
  * puzzleId - see tnoodle_getShortPuzzleNames()
