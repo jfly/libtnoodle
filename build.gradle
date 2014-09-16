@@ -163,6 +163,7 @@ model {
                     // The following are not needed to compile on linux, but are useful for developing on OS X.
                     args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/darwin"
                     args << '-I' << "/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
+                    args << "-fPIC" // TODO - ignore this on Windows.
                 }
             }
             tasks.withType(CppCompile) { task ->
