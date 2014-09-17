@@ -1,3 +1,8 @@
+// http://stackoverflow.com/a/24458188/1739415
+#include <cstddef>//<<<
+namespace std {//<<<
+    typedef decltype(nullptr) nullptr_t;//<<<
+}//<<<
 #include <random>
 
 #include "cube.h"
@@ -20,7 +25,7 @@ int Cube::getWcaNotSolvableInLtFilter() {
     return 4242;//<<<
 }
 
-char *Cube::generateFilteredSeededScramble(int notSolvableInLt, int64_t seed) {
+char const *Cube::generateFilteredSeededScramble(int notSolvableInLt, int64_t seed) {
     // TODO - there's probably a nicer way to do this...
     std::mt19937 *r = NULL;
     if(seed == 0) {
@@ -30,11 +35,11 @@ char *Cube::generateFilteredSeededScramble(int notSolvableInLt, int64_t seed) {
         std::mt19937 rand(seed);
         r = &rand;
     }
-    printf("yo! generateFilteredSeededScramble %d\n", (*r)());//<<<
+    printf("yo! generateFilteredSeededScramble %lu\n", (*r)());//<<<
     return "R2 R2 R2";//<<< TODO - put in heap?
 }
 
-char *Cube::drawScramble(char const *scramble) {
+char const *Cube::drawScramble(char const *scramble) {
     return "<svg></svg>";//<<< TODO - put in heap?
 }
 

@@ -17,7 +17,7 @@ project that uses jtnoodle.
 A properly configured Linux machine can compile binaries for Linux, Windows, and OS X.
 Here's a (likely incomplete) list of dependencies.
 
-- gcc and the jdk are required to compile for Linux.
+- Clang and the jdk are required to compile for Linux.
 - MinGW is required to compile to compile for Windows.
 - [https://github.com/tpoechtrager/osxcross](osxcross) needs to be set up to compile for OS X.
 

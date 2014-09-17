@@ -110,8 +110,9 @@ model {
         }
     }
     toolChains {
-        gcc(Gcc)
-        clang(Clang) // Needed for native OS X development
+        // We only support building with clang.
+        //gcc(Gcc) 
+        clang(Clang)
 
         if(exists("x86_64-w64-mingw32-g++")) {
             mingw(Gcc) {
@@ -141,17 +142,16 @@ model {
                 }
             }
         }
-
-        if(exists("x86_64-apple-darwin11-clang++")) {
+        if(exists("x86_64-apple-darwin12-clang++")) {
             osxcross(Clang) {
                 target "osx_x86_64"
                 eachPlatform {
-                    cCompiler.executable = "x86_64-apple-darwin11-clang"
-                    cppCompiler.executable = "x86_64-apple-darwin11-clang++"
+                    cCompiler.executable = "x86_64-apple-darwin12-clang"
+                    cppCompiler.executable = "x86_64-apple-darwin12-clang++"
                     // http://stackoverflow.com/a/4981870
-                    linker.executable = "x86_64-apple-darwin11-clang++"
-                    assembler.executable = "x86_64-apple-darwin11-as"
-                    staticLibArchiver.executable = "x86_64-apple-darwin11-ar"
+                    linker.executable = "x86_64-apple-darwin12-clang++"
+                    assembler.executable = "x86_64-apple-darwin12-as"
+                    staticLibArchiver.executable = "x86_64-apple-darwin12-ar"
                 }
             }
         }
@@ -163,14 +163,22 @@ model {
                     // The following are not needed to compile on linux, but are useful for developing on OS X.
                     args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/darwin"
                     args << '-I' << "/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
-                    args << "-fPIC" // TODO - ignore this on Windows.
+                    if(!cppCompiler.executable.contains("mingw")) {
+                        // Don't bother with fPIC for windows.
+                        args << "-fPIC"
+                        if(cppCompiler.executable.contains("darwin")) {
+                            args << "-stdlib=libc++"
+                        } else {
+                            args << "-stdlib=libstdc++"
+                        }
+                    }
                     args << "-std=c++11"
+                    args << "-D__STRICT_ANSI__" // http://llvm.org/bugs/show_bug.cgi?id=13530#c3
                 }
             }
             tasks.withType(CppCompile) { task ->
                 task.dependsOn nativeHeaders
             }
-
         }
     }
 }

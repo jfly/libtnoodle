@@ -42,22 +42,22 @@ int tnoodle_getWcaNotSolvableInLtFilter(int puzzleId);
  * Returns a string containing a scramble for the given puzzle that
  *         could be passed to drawScramble() to generate an SVG
  */
-char *tnoodle_generateFilteredSeededScramble(int puzzleId, int notSolvableInLt, int64_t seed);
+char const *tnoodle_generateFilteredSeededScramble(int puzzleId, int notSolvableInLt, int64_t seed);
 
 /*
  * Delegates to tnoodle_generateFilteredSeededScramble()
  */
-char *tnoodle_generateFilteredScramble(int puzzleId, int notSolvableInLt);
+char const *tnoodle_generateFilteredScramble(int puzzleId, int notSolvableInLt);
 
 /*
  * Delegates to tnoodle_generateFilteredSeededScramble()
  */
-char *tnoodle_generateSeededScramble(int puzzleId, int64_t seed);
+char const *tnoodle_generateSeededScramble(int puzzleId, int64_t seed);
 
 /*
  * Delegates to tnoodle_generateFilteredSeededScramble()
  */
-char *tnoodle_generateScramble(int puzzleId);
+char const *tnoodle_generateScramble(int puzzleId);
 
 /*
  * puzzleId - see tnoodle_getShortPuzzleNames()
@@ -65,7 +65,7 @@ char *tnoodle_generateScramble(int puzzleId);
  *
  * Returns a string containing an SVG image.
  */
-char *tnoodle_drawScramble(int puzzleId, char *scramble);
+char const *tnoodle_drawScramble(int puzzleId, char *scramble);
 
 }
 
