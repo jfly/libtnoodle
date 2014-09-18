@@ -1,9 +1,9 @@
+#include "cube.h"
+
 #include <random>
 #include <iostream>
 
 #include <string.h>
-
-#include "cube.h"
 
 namespace tnoodle {
 
@@ -23,16 +23,8 @@ int Cube::getWcaNotSolvableInLtFilter() {
     return 4242;//<<<
 }
 
-char *Cube::generateFilteredSeededScramble(int notSolvableInLt, int64_t seed) {
-    std::mt19937 *r = NULL;
-    if(seed == 0) {
-        static std::mt19937 rand; // TODO - seed from something truly random, such as random_device
-        r = &rand;
-    } else {
-        std::mt19937 rand(seed);
-        r = &rand;
-    }
-    std::cout << "yo! generateFilteredSeededScramble " << (*r)() << std::endl;//<<<
+char *Cube::generateScramble(int notSolvableInLt, std::mt19937& r) {
+    std::cout << "yo! generateFilteredSeededScramble " << r() << std::endl;//<<<
     return strdup("R2 R2 R2");
 }
 

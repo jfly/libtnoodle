@@ -3,6 +3,8 @@
 
 #include "puzzle.h"
 
+#include <random>
+
 namespace tnoodle {
 
 namespace puzzle {
@@ -13,7 +15,7 @@ public:
     char const *getShortName();
     char const *getLongName();
     int getWcaNotSolvableInLtFilter();
-    char *generateFilteredSeededScramble(int notSolvableInLt, int64_t seed);
+    char *generateScramble(int notSolvableInLt, std::mt19937& r);
     char *drawScramble(char const *scramble);
 };
 

@@ -2,6 +2,8 @@
 #include "puzzle.h"
 #include "cube.h"
 
+#include <random>
+
 int summer() {
     return 42;
 }
@@ -23,7 +25,13 @@ int tnoodle_getWcaNotSolvableInLtFilter(int puzzleId) {
 }
 
 char *tnoodle_generateFilteredSeededScramble(int puzzleId, int notSolvableInLt, int64_t seed) {
-    return puzzles[puzzleId]->generateFilteredSeededScramble(notSolvableInLt, seed);
+    if(seed == 0) {
+        static std::mt19937 rand; // TODO - seed from something truly random, such as random_device
+        return puzzles[puzzleId]->generateScramble(notSolvableInLt, rand);
+    } else {
+        std::mt19937 rand(seed);
+        return puzzles[puzzleId]->generateScramble(notSolvableInLt, rand);
+    }
 }
 
 char *tnoodle_generateFilteredScramble(int puzzleId, int notSolvableInLt) {
