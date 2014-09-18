@@ -13,8 +13,8 @@ public:
     char const *getShortName();
     char const *getLongName();
     int getWcaNotSolvableInLtFilter();
-    char const *generateFilteredSeededScramble(int notSolvableInLt, int64_t seed);
-    char const *drawScramble(char const *scramble);
+    char *generateFilteredSeededScramble(int notSolvableInLt, int64_t seed);
+    char *drawScramble(char const *scramble);
 };
 
 } // puzzle

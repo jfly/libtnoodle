@@ -19,10 +19,13 @@ Here's a (likely incomplete) list of dependencies.
 
 - Clang and the jdk are required to compile for Linux.
 - MinGW is required to compile to compile for Windows.
-- [https://github.com/tpoechtrager/osxcross](osxcross) needs to be set up to compile for OS X.
+- [https://github.com/tpoechtrager/osxcross](osxcross) needs to be set up to
+  compile for OS X. You must set the MACOSX_DEPLOYMENT_TARGET environment
+  variable to 10.9 (MACOSX_DEPLOYMENT_TARGET=10.9)!
 
-Once everything is setup, `./gradlew jar` will produce build/libs/libtnoodle.jar.
-`java -jar build/libs/libtnoodle.jar` should *just work*.
+Once everything is setup, `./gradlew jar` will produce
+build/libs/jtnoodle-VERSION.jar.
+`java -jar build/libs/libtnoodle-VERSION.jar` should *just work*.
 
 ## Releasing
 

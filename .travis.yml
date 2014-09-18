@@ -5,6 +5,8 @@ env:
     global:
         # From http://stackoverflow.com/a/21841688
         - TERM=dumb
+        # Deployment target for oxcross
+        - MACOSX_DEPLOYMENT_TARGET=10.9
         - artifactory_user=jfly
         # Setting the artifactory_password env var
         - secure: "bsAUSuyK5j7CvTtuGhYZlvg3KIz7vQKtPVae7hkYfRbWUJRUs+XO/1KEYqZajVsBNTHItN6uTr64t5MF9PExYA0smJLtYzBGjrejlB1Z7V14d7+1mvqE1luI9OtrEG713v9UTGN4Pa5OXpHBvpJTcsT/ep6IkfkXcLVUF64JOwY="

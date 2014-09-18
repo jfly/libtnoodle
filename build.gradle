@@ -142,16 +142,16 @@ model {
                 }
             }
         }
-        if(exists("x86_64-apple-darwin12-clang++")) {
+        if(exists("x86_64-apple-darwin13-clang++")) {
             osxcross(Clang) {
                 target "osx_x86_64"
                 eachPlatform {
-                    cCompiler.executable = "x86_64-apple-darwin12-clang"
-                    cppCompiler.executable = "x86_64-apple-darwin12-clang++"
+                    cCompiler.executable = "x86_64-apple-darwin13-clang"
+                    cppCompiler.executable = "x86_64-apple-darwin13-clang++"
                     // http://stackoverflow.com/a/4981870
-                    linker.executable = "x86_64-apple-darwin12-clang++"
-                    assembler.executable = "x86_64-apple-darwin12-as"
-                    staticLibArchiver.executable = "x86_64-apple-darwin12-ar"
+                    linker.executable = "x86_64-apple-darwin13-clang++"
+                    assembler.executable = "x86_64-apple-darwin13-as"
+                    staticLibArchiver.executable = "x86_64-apple-darwin13-ar"
                 }
             }
         }
@@ -159,21 +159,26 @@ model {
             eachPlatform {
                 cppCompiler.withArguments { args ->
                     args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
-                    args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
-                    // The following are not needed to compile on linux, but are useful for developing on OS X.
-                    args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/darwin"
-                    args << '-I' << "/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
-                    if(!cppCompiler.executable.contains("mingw")) {
+                    if(cppCompiler.executable.contains("mingw")) {
                         // Don't bother with fPIC for windows.
+                        args << "-std=c++11"
+                    } else if(cppCompiler.executable.contains("darwin")) {
+                        // OS X
                         args << "-fPIC"
-                        if(cppCompiler.executable.contains("darwin")) {
-                            args << "-stdlib=libc++"
-                        } else {
-                            args << "-stdlib=libstdc++"
-                        }
+                        args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/darwin"
+                        args << '-I' << "/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
+                        args << "-std=c++11"
+                    } else {
+                        // Linux
+                        args << "-fPIC"
+                        args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
+                        args << "-std=c++11"
                     }
-                    args << "-std=c++11"
-                    args << "-D__STRICT_ANSI__" // http://llvm.org/bugs/show_bug.cgi?id=13530#c3
+                    // In order to compile for Windows and OS X on Linux, we need
+                    // JNI headers. Rather than installing the JDKs for those
+                    // respective platforms, it seems to work if we just reuse
+                    // the Linux headers.
+                    args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include/linux"
                 }
             }
             tasks.withType(CppCompile) { task ->

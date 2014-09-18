@@ -1,9 +1,7 @@
-// http://stackoverflow.com/a/24458188/1739415
-#include <cstddef>//<<<
-namespace std {//<<<
-    typedef decltype(nullptr) nullptr_t;//<<<
-}//<<<
 #include <random>
+#include <iostream>
+
+#include <string.h>
 
 #include "cube.h"
 
@@ -25,8 +23,7 @@ int Cube::getWcaNotSolvableInLtFilter() {
     return 4242;//<<<
 }
 
-char const *Cube::generateFilteredSeededScramble(int notSolvableInLt, int64_t seed) {
-    // TODO - there's probably a nicer way to do this...
+char *Cube::generateFilteredSeededScramble(int notSolvableInLt, int64_t seed) {
     std::mt19937 *r = NULL;
     if(seed == 0) {
         static std::mt19937 rand; // TODO - seed from something truly random, such as random_device
@@ -35,12 +32,12 @@ char const *Cube::generateFilteredSeededScramble(int notSolvableInLt, int64_t se
         std::mt19937 rand(seed);
         r = &rand;
     }
-    printf("yo! generateFilteredSeededScramble %lu\n", (*r)());//<<<
-    return "R2 R2 R2";//<<< TODO - put in heap?
+    std::cout << "yo! generateFilteredSeededScramble " << (*r)() << std::endl;//<<<
+    return strdup("R2 R2 R2");
 }
 
-char const *Cube::drawScramble(char const *scramble) {
-    return "<svg></svg>";//<<< TODO - put in heap?
+char *Cube::drawScramble(char const *scramble) {
+    return strdup("<svg></svg>");
 }
 
 } // puzzle
