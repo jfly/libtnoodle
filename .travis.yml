@@ -21,7 +21,7 @@ before_install:
     # To compile for OS X, we need osxcross.
     - git clone --depth=1 https://github.com/tpoechtrager/osxcross
     - cd osxcross
-    - (cd tarballs; wget https://dl.dropboxusercontent.com/u/1463845/osxcross/MacOSX10.8.sdk.tar.bz2)
+    - (cd tarballs; wget https://dl.dropboxusercontent.com/u/1463845/osxcross/MacOSX10.9.sdk.tar.bz2)
     - sudo tools/get_dependencies.sh
     - yes | ./build.sh
     - eval `target/bin/osxcross-env`
