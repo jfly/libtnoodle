@@ -161,7 +161,10 @@ model {
                     args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
                     if(cppCompiler.executable.contains("mingw")) {
                         // Don't bother with fPIC for windows.
-                        args << "-std=c++11"
+                        // The latest version of g++-mingw-w64 for travis ci's
+                        // Ubuntu 12.04 is 4.6.3, which doesn't have support
+                        // for c++11.
+                        args << "-std=c++0x"
                     } else if(cppCompiler.executable.contains("darwin")) {
                         // OS X
                         args << "-fPIC"
