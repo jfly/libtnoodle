@@ -12,7 +12,7 @@ group = 'tk.tnoodle'
 sourceCompatibility = 1.6
 
 libraries {
-    tnoodle {}
+    cnoodle {}
     tnoodlejni {}
 }
 
@@ -23,12 +23,12 @@ executables {
 sources {
     main {
         cpp {
-            lib libraries.tnoodle
+            lib libraries.cnoodle
         }
     }
     tnoodlejni {
         cpp {
-            lib libraries.tnoodle.static
+            lib libraries.cnoodle.static
         }
     }
 }
