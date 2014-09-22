@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
-#include "tnoodlejni.h"
-#include "tnoodle.h"
+#include "jnitnoodle.h"
+#include "cnoodle.h"
 
 JNIEXPORT jint JNICALL Java_JTNoodle_summer
   (JNIEnv *jenv, jclass clz) {

@@ -35,7 +35,7 @@ public class JTNoodle {
         //  https://github.com/xerial/snappy-java/issues/6
         // and
         //  https://github.com/xerial/snappy-java/blob/develop/src/main/java/org/xerial/snappy/SnappyLoader.java#L288
-        String libFilename = System.mapLibraryName("tnoodlejni");
+        String libFilename = System.mapLibraryName("jnitnoodle");
         if(libFilename.endsWith("jnilib")) {
             // mapLibraryName on JDK 7 on OS X started returning *.dylib
             // instead of the older *.jnilib. We're hip with the times,

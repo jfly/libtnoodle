@@ -13,7 +13,8 @@ sourceCompatibility = 1.6
 
 libraries {
     cnoodle {}
-    tnoodlejni {}
+    jnitnoodle {}
+    pytnoodle {}
 }
 
 executables {
@@ -26,8 +27,16 @@ sources {
             lib libraries.cnoodle
         }
     }
-    tnoodlejni {
+    jnitnoodle {
         cpp {
+            lib libraries.cnoodle.static
+        }
+    }
+    pytnoodle {
+        cpp {
+            source {
+                srcDir "$buildDir/pytnoodle"
+            }
             lib libraries.cnoodle.static
         }
     }
@@ -44,13 +53,16 @@ sourceSets {
     jtnoodle
 }
 
+//<<< SWIG >>>
+// mkdir build/pytnoodle; swig -builtin -python -c++ -Isrc/cnoodle/cpp -Isrc/cnoodle/headers -o build/pytnoodle/pytnoodle_wrap.cpp src/pytnoodle/pytnoodle.i
+
 // TODO - there must be a better way to get the headers directory
 // for jtnoodle. I couldn't find anything under
 // sources.jtnoodle.cpp.exportedHeaders, though.
-def nativeHeadersDir = file("$projectDir/src/tnoodlejni/headers")
+def nativeHeadersDir = file("$projectDir/src/jnitnoodle/headers")
 
 task nativeHeaders() {
-    def outputFile = file("$nativeHeadersDir/tnoodlejni.h")
+    def outputFile = file("$nativeHeadersDir/jnitnoodle.h")
     inputs.files sourceSets.jtnoodle.output
     outputs.file outputFile
     doLast {
@@ -158,7 +170,12 @@ model {
         all {
             eachPlatform {
                 cppCompiler.withArguments { args ->
-                    args << '-I' << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    args << "-I" << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    //<<<
+                    args << "-I" << "/usr/include/python3.4m"
+                    args << "-I" << "/usr/include/python3.3m"
+                    args << "-I" << "/usr/include/python3.2"
+                    //<<<
                     if(cppCompiler.executable.contains("mingw")) {
                         // Don't bother with fPIC for windows.
                         // The latest version of g++-mingw-w64 for travis ci's
@@ -191,17 +208,17 @@ model {
     }
 }
 
-// Task to build all shared libraries that we are capable of building.
-task buildSharedLibraries {
+// Task to build all jni shared libraries that we are capable of building.
+task buildJniAllPlatforms {
     dependsOn binaries.withType(SharedLibraryBinary).matching {
-        it.buildable
+        return it.buildable && it.component.getName() == 'jnitnoodle'
     }
     dependsOn jtnoodleClasses
 }
 
-task copySharedLibrariesToJava(type: Copy, dependsOn: buildSharedLibraries) {
+task copySharedLibrariesToJava(type: Copy, dependsOn: buildJniAllPlatforms) {
     from {
-        libraries.tnoodlejni.binaries.withType(SharedLibraryBinary).collect {
+        libraries.jnitnoodle.binaries.withType(SharedLibraryBinary).collect {
             def containingFolder = it.sharedLibraryFile.getParentFile()
             fileTree(dir: containingFolder.getParentFile(),
                      include: containingFolder.getName() + "/**")
