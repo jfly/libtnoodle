@@ -35,33 +35,36 @@ sources {
     pytnoodle {
         cpp {
             source {
-                srcDir "$buildDir/pytnoodle"
+                srcDir "$buildDir/pytnoodle-sources"
+                // Gradle skips the myPytnoodleSharedLibrary when it sees that
+                // "$buildDir/pytnoodle-sources" doesn't contain any c code. To hack
+                // around this, I've placed an empty c header file (force.h) in
+                // $projectDir/src/pytnoodle/cpp to force compilation to occur.
+                srcDir "$projectDir/src/pytnoodle/cpp"
             }
             lib libraries.cnoodle.static
         }
     }
 }
-// Ignore .swp files everywhere
+// Ignore non c/c++ files everywhere
 for(source in sources) {
     if(!source.hasProperty('cpp')) {
         continue
     }
-    source.cpp.source.excludes += "**/*.swp"
+    source.cpp.source.includes += "**/*.cpp"
+    source.cpp.source.includes += "**/*.c"
+    source.cpp.source.includes += "**/*.h"
 }
 
 sourceSets {
     jtnoodle
 }
 
-//<<< SWIG >>>
-// mkdir build/pytnoodle; swig -builtin -python -c++ -Isrc/cnoodle/cpp -Isrc/cnoodle/headers -o build/pytnoodle/pytnoodle_wrap.cpp src/pytnoodle/pytnoodle.i
-
-// TODO - there must be a better way to get the headers directory
-// for jtnoodle. I couldn't find anything under
-// sources.jtnoodle.cpp.exportedHeaders, though.
-def nativeHeadersDir = file("$projectDir/src/jnitnoodle/headers")
-
 task nativeHeaders() {
+    // TODO - there must be a better way to get the headers directory
+    // for jtnoodle. I couldn't find anything under
+    // sources.jtnoodle.cpp.exportedHeaders, though.
+    def nativeHeadersDir = file("$projectDir/src/jnitnoodle/headers")
     def outputFile = file("$nativeHeadersDir/jnitnoodle.h")
     inputs.files sourceSets.jtnoodle.output
     outputs.file outputFile
@@ -99,7 +102,7 @@ def exists(bin) {
 
 model {
     platforms {
-        // We're only targeting 64-bit binaries on OS X for now.
+        my {}
         linux_x86_64 {
             architecture "x86_64"
             operatingSystem "linux"
@@ -116,6 +119,7 @@ model {
             architecture "x86"
             operatingSystem "windows"
         }
+        // We're only targeting 64-bit binaries on OS X for now.
         osx_x86_64 {
             architecture "x86_64"
             operatingSystem "osx"
@@ -208,6 +212,69 @@ model {
     }
 }
 
+task swig {
+    def inputFile = file("$projectDir/src/pytnoodle/pytnoodle.i")
+    def outputFile = file("$buildDir/pytnoodle-sources/pytnoodle_wrap.cpp")
+    inputs.files inputFile
+    outputs.file outputFile
+    doLast {
+        outputFile.parentFile.mkdirs()
+        exec {
+            executable org.gradle.internal.jvm.Jvm.current().getExecutable('swig')
+            args '-o', outputFile
+            args '-python'
+            args '-builtin'
+            args '-c++'
+
+            // TODO - can't figure out how to generate these from
+            // source.cnoodle
+            args '-Isrc/cnoodle/cpp'
+            args '-Isrc/cnoodle/headers'
+
+            args inputFile
+        }
+    }
+}
+
+// Dirty hack to make sure swig runs before any
+// mypytnoodle cpp compilation tasks.
+tasks.whenTaskAdded { task ->
+    if(task.name.toLowerCase().contains("mypytnoodle")) {
+        task.dependsOn swig
+    }
+}
+
+def pytnoodleBuildDir = file("$buildDir/pytnoodle/")
+task copySwigPythonLibrary(type: Copy) {
+    dependsOn 'myPytnoodleSharedLibrary'
+    pytnoodleBuildDir.mkdirs()
+
+    from {
+        files("$buildDir/pytnoodle-sources/")
+    }
+    include "*.py"
+    into pytnoodleBuildDir
+}
+
+task copySwigSharedLibrary(type: Copy) {
+    dependsOn 'myPytnoodleSharedLibrary'
+    pytnoodleBuildDir.mkdirs()
+
+    // Rename shared library file so swig's python wrapper code can
+    // find it. Note that this doesn't change the soname, but that doesn't
+    // seem to be an issue.
+    rename '(.+)\\.([^.]+)', '_pytnoodle.$2'
+    from {
+        files("$buildDir/binaries/pytnoodleSharedLibrary/my/")
+    }
+    include "*"
+    into pytnoodleBuildDir
+}
+
+task pytnoodle {
+    dependsOn copySwigSharedLibrary, copySwigPythonLibrary
+}
+
 // Task to build all jni shared libraries that we are capable of building.
 task buildJniAllPlatforms {
     dependsOn binaries.withType(SharedLibraryBinary).matching {
@@ -218,7 +285,9 @@ task buildJniAllPlatforms {
 
 task copyJniLibraries(type: Copy, dependsOn: buildJniAllPlatforms) {
     from {
-        libraries.jnitnoodle.binaries.withType(SharedLibraryBinary).collect {
+        libraries.jnitnoodle.binaries.withType(SharedLibraryBinary).matching {
+            return it.targetPlatform.name != "my";
+        }.collect {
             def containingFolder = it.sharedLibraryFile.getParentFile()
             fileTree(dir: containingFolder.getParentFile(),
                      include: containingFolder.getName() + "/**")
