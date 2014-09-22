@@ -31,8 +31,17 @@ before_install:
     - eval `target/bin/osxcross-env`
     - cd ..
 
-    # Install swig so we can run tests
-    - sudo apt-get -qq install swig python3-dev
+    # Install swig3 so we can run tests
+    # Copied from https://github.com/ilveroluca/rapi/commit/bc3d55b74f9d31fff5f5120b5e32a675b1934f1c
+    #- sudo apt-get -qq install swig python3-dev
+    - sudo apt-get install libpcre3-dev
+    - wget http://prdownloads.sourceforge.net/swig/swig-3.0.2.tar.gz -O - | tar xzf -
+    - cd swig-3.0.2/
+    - ./configure -prefix=$HOME --without-alllang --with-python
+    - make -j 2
+    - make install
+    - cd ..
+    - export PATH=$HOME/bin:$PATH 
 
 install:
     # Disable default "./gradlew assemble" command.
