@@ -275,6 +275,22 @@ task pytnoodle {
     dependsOn copySwigSharedLibrary, copySwigPythonLibrary
 }
 
+// Override the test task provided by Java
+task test(overwrite: true) {//<<<
+    dependsOn pytnoodle
+
+    doLast {
+        exec {
+            executable org.gradle.internal.jvm.Jvm.current().getExecutable('python3')
+            args '-m', 'unittest'
+            args 'discover'
+            args '--start-directory', 'src/test'
+            args '--pattern' ,'*Test.py'
+            args '-v'
+        }
+    }
+}
+
 // Task to build all jni shared libraries that we are capable of building.
 task buildJniAllPlatforms {
     dependsOn binaries.withType(SharedLibraryBinary).matching {
@@ -399,7 +415,6 @@ artifactory {
         }
     }
 }
-
 
 task wrapper(type: Wrapper) {
     // We need a version of gradle with

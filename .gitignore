@@ -3,3 +3,6 @@ build/
 
 # vim stuff
 *.swp
+
+# python stuff
+__pycache__

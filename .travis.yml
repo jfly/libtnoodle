@@ -40,5 +40,5 @@ install:
     - true
 
 script:
-    # Build and publish to oss.jfrog.org
-    - ./gradlew artifactoryPublish
+    # Publish to oss.jfrog.org if our tests pass.
+    - ./gradlew test artifactoryPublish

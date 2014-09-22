@@ -14,18 +14,33 @@ project that uses jtnoodle.
 
 ## Compiling
 
+### Requirements
+
 A properly configured Linux machine can compile binaries for Linux, Windows, and OS X.
 Here's a (likely incomplete) list of dependencies.
 
-- Clang and the jdk are required to compile for Linux.
-- MinGW is required to compile to compile for Windows.
+- [Clang](http://clang.llvm.org/) and the JDK are required to compile for Linux.
+- [MinGW-w64](http://mingw-w64.sourceforge.net/) is required to compile to
+  compile for Windows.
 - [https://github.com/tpoechtrager/osxcross](osxcross) needs to be set up to
   compile for OS X. You must set the MACOSX_DEPLOYMENT_TARGET environment
   variable to 10.9 (MACOSX_DEPLOYMENT_TARGET=10.9)!
 
-Once everything is setup, `./gradlew jar` will produce
-build/libs/jtnoodle-VERSION.jar.
-`java -jar build/libs/libtnoodle-VERSION.jar` should *just work*.
+### Commands
+
+- `./gradlew jar` produces build/libs/jtnoodle-VERSION.jar.
+- `./gradlew run` runs main.cpp (this may be removed in the future).
+
+## Testing
+
+### Requirements
+
+- [Swig](http://www.swig.org/) is used to produce a Python wrapper for our C++ code.
+
+### Commands
+
+- `./gradlew test` to run python tests.
+- `./gradlew pytnoodle` will produce Swig wrapper code in `build/pytnoodle`.
 
 ## Releasing
 
