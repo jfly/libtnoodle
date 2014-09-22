@@ -28,7 +28,7 @@ char *Cube::generateScramble(int notSolvableInLt, std::mt19937& r) {
     return strdup("R2 R2 R2");
 }
 
-char *Cube::drawScramble(char const *scramble) {
+char *Cube::drawScramble(char const *scramble, char const *colorScheme) {
     return strdup("<svg></svg>");
 }
 

@@ -16,7 +16,7 @@ public:
     char const *getLongName();
     int getWcaNotSolvableInLtFilter();
     char *generateScramble(int notSolvableInLt, std::mt19937& r);
-    char *drawScramble(char const *scramble);
+    char *drawScramble(char const *scramble, char const *colorScheme);
 };
 
 } // puzzle

@@ -48,6 +48,20 @@ char *tnoodle_generateScramble(int puzzleId) {
     return tnoodle_generateFilteredSeededScramble(puzzleId, filter, 0);
 }
 
-char *tnoodle_drawScramble(int puzzleId, char *scramble) {
-    return puzzles[puzzleId]->drawScramble(scramble);
+char *tnoodle_drawScramble(int puzzleId, char *scramble, char *colorScheme) {
+/*
+  <<< maroon #800000 red #ff0000 orange #ffA500 yellow #ffff00 olive #808000
+purple #800080 fuchsia #ff00ff white #ffffff lime #00ff00 green #008000
+navy #000080 blue #0000ff aqua #00ffff teal #008080
+black #000000 silver #c0c0c0 gray #808080 >>>
+*/
+    return puzzles[puzzleId]->drawScramble(scramble, colorScheme);
+}
+
+char const *tnoodle_getColorScheme(int puzzleId) {
+    return "A,B";// TODO <<<
+}
+
+char const *tnoodle_getColorSchemeNames(int puzzleId) {
+    return "U,D";// TODO <<<
 }
