@@ -1,11 +1,11 @@
-#ifndef TNOODLE_H
-#define TNOODLE_H
+#ifndef CNOODLE_H
+#define CNOODLE_H
 
 #include <stdint.h>
 
 extern "C" {
 
-int summer();
+int summer(); // TODO - remove
 
 // TODO - initialization? thread safety?
 // TODO - color schemes?
@@ -71,4 +71,4 @@ char *tnoodle_drawScramble(int puzzleId, char *scramble);
 
 }
 
-#endif // TNOODLE_H
+#endif // CNOODLE_H
