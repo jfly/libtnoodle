@@ -216,7 +216,7 @@ task buildJniAllPlatforms {
     dependsOn jtnoodleClasses
 }
 
-task copySharedLibrariesToJava(type: Copy, dependsOn: buildJniAllPlatforms) {
+task copyJniLibraries(type: Copy, dependsOn: buildJniAllPlatforms) {
     from {
         libraries.jnitnoodle.binaries.withType(SharedLibraryBinary).collect {
             def containingFolder = it.sharedLibraryFile.getParentFile()
@@ -227,7 +227,7 @@ task copySharedLibrariesToJava(type: Copy, dependsOn: buildJniAllPlatforms) {
     into new File(sourceSets.jtnoodle.output.classesDir, "/native/")
 }
 
-task run(type: JavaExec, dependsOn: copySharedLibrariesToJava) {
+task run(type: JavaExec, dependsOn: copyJniLibraries) {
     main = "Main"
     classpath = sourceSets.jtnoodle.runtimeClasspath
 }
@@ -238,7 +238,7 @@ jar {
         attributes 'Main-Class': 'Main'
     }
 }
-jar.dependsOn copySharedLibrariesToJava
+jar.dependsOn copyJniLibraries
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
