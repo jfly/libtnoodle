@@ -50,4 +50,8 @@ install:
 
 script:
     # Publish to oss.jfrog.org if our tests pass.
-    - ./gradlew test artifactoryPublish
+    - ./gradlew -i test artifactoryPublish
+
+after_failure:
+    # Dump compiler options used.
+    - tail +1 build/tmp/*/options.txt
