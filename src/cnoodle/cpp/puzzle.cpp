@@ -32,8 +32,10 @@ char const *Puzzle::getColorSchemeNames() {
 
 char *Puzzle::drawScramble(char const *scramble, char const *colorScheme) {
     char *colorSchemeCopy = strndup(colorScheme, MAX_COLORSCHEME_LENGTH);
-    char **colorSchemeArr = NULL;
+    char const **colorSchemeArr = NULL;
     char *svg = drawScramble(scramble, colorSchemeArr);//<<<
     free(colorSchemeCopy);
     return svg;
 }
+
+Puzzle::~Puzzle() {};

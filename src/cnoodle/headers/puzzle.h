@@ -22,6 +22,7 @@ class Puzzle {
         char const *getColorSchemeNames();
         char *drawScramble(char const *scramble, char const *colorScheme);
         char *generateScramble(int notSolvableInLt, int64_t seed);
+        virtual ~Puzzle() = 0;
 };
 
 #endif // PUZZLE_H
