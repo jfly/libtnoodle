@@ -175,6 +175,7 @@ model {
             eachPlatform {
                 cppCompiler.withArguments { args ->
                     args << "-g" // debugging symbols
+                    args << "-Wall"
                     args << "-I" << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
                     //<<< https://github.com/ilveroluca/rapi/blob/master/pyrapi/Makefile#L6 >>>
                     args << "-I" << "/usr/include/python3.4m"

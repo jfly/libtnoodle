@@ -53,9 +53,9 @@ black #000000 silver #c0c0c0 gray #808080 >>>
 }
 
 char const *tnoodle_getColorScheme(int puzzleId) {
-    return "A,B";// TODO <<<
+    return puzzles[puzzleId]->getColorScheme();
 }
 
 char const *tnoodle_getColorSchemeNames(int puzzleId) {
-    return "U,D";// TODO <<<
+    return puzzles[puzzleId]->getColorSchemeNames();
 }

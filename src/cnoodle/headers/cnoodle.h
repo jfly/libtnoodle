@@ -61,8 +61,13 @@ char *tnoodle_generateScramble(int puzzleId);
 
 /*
  * puzzleId - see tnoodle_getShortPuzzleNames()
- * scramble - turns to apply to solved puzzle
- * colorScheme - the color scheme to use, see tnoodle_getColorScheme()
+ * scramble - turns to apply to solved puzzle. If longer than
+ *            MAX_SCRAMBLE_LENGTH, this function must not crash, but
+ *            its behavior is undefined.
+ * colorScheme - the color scheme to use, see tnoodle_getColorScheme(). If this
+ *               contains the wrong number of colors, invalid color names, or
+ *               is longer than MAX_COLORSCHEME_LENGTH, this function must not
+ *               crash, but its behavior is undefined.
  *
  * Returns a string containing an SVG image. The returned pointer can be passed
  *         to free().
@@ -71,9 +76,8 @@ char *tnoodle_drawScramble(int puzzleId, char *scramble, char *colorScheme);
 
 /*
  * Returns the default color scheme for the given puzzle. The color scheme is
- * represented as a comma separated string of colors. Each color must be either a
- * a 6 or 3 digit hex code, or one of the 17 css color names defined here
- * http://www.w3.org/TR/CSS21/syndata.html#color-units.
+ * represented as a comma separated string of colors. Each color must be a valid
+ * SVG color, see http://www.w3.org/TR/SVG/types.html#DataTypeColor.
  */
 char const *tnoodle_getColorScheme(int puzzleId);
 
