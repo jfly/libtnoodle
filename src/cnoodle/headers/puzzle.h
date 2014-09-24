@@ -5,10 +5,9 @@
 
 #include <stdint.h>
 
-#define MAX_COLORSCHEME_LENGTH (128)
-// 777 is 100 moves, each of which is 4 characters, so 1024
-// should be plenty large.
-#define MAX_SCRAMBLE_LENGTH (1024)
+#define MAX_COLORSCHEME_LENGTH (128 - 1)
+// 777 is 100 moves, each of which is 4 characters, so this should be plenty large.
+#define MAX_SCRAMBLE_LENGTH (1024 - 1)
 
 class Puzzle {
     protected:

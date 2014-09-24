@@ -31,11 +31,15 @@ char const *Puzzle::getColorSchemeNames() {
 }
 
 char *Puzzle::drawScramble(char const *scramble, char const *colorScheme) {
-    char *colorSchemeCopy = strndup(colorScheme, MAX_COLORSCHEME_LENGTH);
+    size_t len = strnlen(colorScheme, MAX_COLORSCHEME_LENGTH);
+    char colorSchemeCopy[len + 1];
+    strncpy(colorSchemeCopy, colorScheme, len);
+    colorSchemeCopy[len] = '\0';
+
     char const **colorSchemeArr = NULL;
-    char *svg = drawScramble(scramble, colorSchemeArr);//<<<
-    free(colorSchemeCopy);
-    return svg;
+    // TODO - >>> populate colorSchemeArr <<<
+
+    return drawScramble(scramble, colorSchemeArr);
 }
 
 Puzzle::~Puzzle() {};
