@@ -100,6 +100,13 @@ def exists(bin) {
     }
 }
 
+def pythonIncludes = new ByteArrayOutputStream()
+exec {
+    executable = 'python3-config'
+    args = [ '--includes' ]
+    standardOutput = pythonIncludes
+}
+
 model {
     platforms {
         my {}
@@ -177,11 +184,9 @@ model {
                     args << "-g" // debugging symbols
                     args << "-Wall"
                     args << "-I" << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
-                    //<<< https://github.com/ilveroluca/rapi/blob/master/pyrapi/Makefile#L6 >>>
-                    args << "-I" << "/usr/include/python3.4m"
-                    args << "-I" << "/usr/include/python3.3m"
-                    args << "-I" << "/usr/include/python3.2"
-                    //<<<
+                    pythonIncludes.toString().split().each { arg ->
+                        args << arg
+                    }
                     if(cppCompiler.executable.contains("mingw")) {
                         // Don't bother with fPIC for windows.
                         // The latest version of g++-mingw-w64 for travis ci's
@@ -278,7 +283,7 @@ task pytnoodle {
 }
 
 // Override the test task provided by Java
-task test(overwrite: true) {//<<<
+task test(overwrite: true) {
     dependsOn pytnoodle
 
     doLast {
