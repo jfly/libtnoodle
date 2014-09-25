@@ -1,7 +1,8 @@
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(JTNoodle.getShortPuzzleName(0) + " scramble: " +
-                JTNoodle.generateScramble(0));
+        String shortName = jtnoodle.tnoodle_getShortPuzzleName(0);
+        String scramble = jtnoodle.tnoodle_generateScramble(0);
+        System.out.println(shortName + " scramble: " + scramble);
     }
 }

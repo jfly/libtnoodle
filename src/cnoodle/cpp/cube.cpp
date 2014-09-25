@@ -29,7 +29,6 @@ unsigned int Cube::getWcaNotSolvableInLtFilter() {
 }
 
 char *Cube::generateScramble(unsigned int notSolvableInLt, std::mt19937& r) {
-    std::cout << "yo! generateFilteredSeededScramble " << r() << std::endl;//<<<
     return strdup("R2 R2 R2");
 }
 
