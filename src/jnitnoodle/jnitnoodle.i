@@ -10,7 +10,6 @@
 
 %pragma(java) jniclasscode=%{
   static {
-System.out.println("hello world!");//<<<
     try {
         NativeUtils.loadLibrary("jnitnoodle");
     } catch(java.io.IOException e) {
