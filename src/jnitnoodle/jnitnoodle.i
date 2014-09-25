@@ -4,6 +4,9 @@
 #include "cnoodle.h"
 %}
 
+# Remove all "tnoodle_" prefixes.
+%rename("%(strip:[tnoodle_])s") "";
+
 %include "stdint.i"
 
 %include "cnoodle.h"
