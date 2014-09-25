@@ -82,5 +82,6 @@ public class JTNoodle {
         return "/native/" + getTranslatedOsName() + "_" + getTranslatedArchName();
     }
 
-    public static native int summer();
+    public static native String getShortPuzzleName(int puzzleId);
+    public static native String generateScramble(int puzzleId);
 }

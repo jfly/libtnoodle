@@ -2,6 +2,5 @@
 #include "cnoodle.h"
 
 int main() {
-    printf("Hello, World!\n");//<<<
-    printf("summer: %d\n", summer());
+    printf("%s scramble: %s\n", tnoodle_getShortPuzzleName(0), tnoodle_generateScramble(0));
 }

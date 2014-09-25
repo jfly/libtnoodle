@@ -9,11 +9,19 @@ extern "C" {
 #endif
 /*
  * Class:     JTNoodle
- * Method:    summer
- * Signature: ()I
+ * Method:    getShortPuzzleName
+ * Signature: (I)Ljava/lang/String;
  */
-JNIEXPORT jint JNICALL Java_JTNoodle_summer
-  (JNIEnv *, jclass);
+JNIEXPORT jstring JNICALL Java_JTNoodle_getShortPuzzleName
+  (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     JTNoodle
+ * Method:    generateScramble
+ * Signature: (I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_JTNoodle_generateScramble
+  (JNIEnv *, jclass, jint);
 
 #ifdef __cplusplus
 }

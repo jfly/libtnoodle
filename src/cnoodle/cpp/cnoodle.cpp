@@ -4,10 +4,6 @@
 
 #include <random>
 
-int summer() {
-    return 42;
-}
-
 static Puzzle *puzzles[] = {
     new tnoodle::puzzle::Cube()
 };

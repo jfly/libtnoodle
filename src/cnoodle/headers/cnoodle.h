@@ -5,8 +5,6 @@
 
 extern "C" {
 
-int summer(); // TODO - remove
-
 // TODO - get a list of all puzzles? maybe not that useful...
 // TODO - can swig generate java constants for us?
 
