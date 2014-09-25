@@ -12,7 +12,7 @@ BE USED FOR OFFICIAL WCA COMPETITIONS. **
 See [jtnoodle-demo](https://github.com/jfly/jtnoodle-demo) for an example
 project that uses jtnoodle.
 
-## Compiling
+## How to develop
 
 ### Requirements
 
@@ -28,18 +28,18 @@ Here's a (likely incomplete) list of dependencies.
   compile for OS X. You must set the MACOSX_DEPLOYMENT_TARGET environment
   variable to 10.9 (MACOSX_DEPLOYMENT_TARGET=10.9)!
 
-### Commands
+### Building
 
 - `./gradlew jar` produces build/libs/jtnoodle-VERSION.jar.
 - `./gradlew run` runs main.cpp (this may be removed in the future).
 
-## Testing
+### Testing
 
 - `./gradlew test` to run python tests.
 - If you want to run tests in `src/test/` directly, you need to run `./gradlew
   pytnoodle` first to produce the Swig wrapper code in `build/pytnoodle`.
 
-## Releasing
+### Releasing
 
 Travis CI is configured to publish to
 http://oss.jfrog.org/oss-snapshot-local/tk/tnoodle/ on each build.
@@ -49,13 +49,17 @@ releases to jcenter.
 
 ## Components (under src/)
 
-- libtnoodle - A pure C/C++ library for generating scrambles. Produces
-  libtnoodle.{so,dll,dylib}
-- jtnoodle - A pure Java library that simply wraps tnoodle. It also defines a
-  very basic main() to generate scrambles via the cli. Depends on libtnoodle,
-  produces jtnoodle.jar.
+- cnoodle - A pure C/C++ library for generating scrambles. Produces
+  `libcnoodle.{so,dll,dylib}`
+- jtnoodle - A Java Native Interface (JNI) wrapper for cnoodle. It also
+  defines a very basic main() to generate scrambles via the cli. Produces
+  `jtnoodle-VERSION.jar`.
+- pytnoodle - A Python wrapper for cnoodle. Produces `pytnoodle.py` and
+  `_pytnoodle.so` in `build/pytnoodle`. We could investigate publishing this to
+  [PyPI](https://pypi.python.org/pypi).
+- test - Python tests for cnoodle. Depends on pytnoodle.
 
-## TODO
+## Random musings...
 
 This is an experiment. It remains to be seen how we're going to include a
 version of libtnoodle for every major operating system + architecture pair in
