@@ -19,6 +19,8 @@ project that uses jtnoodle.
 A properly configured Linux machine can compile binaries for Linux, Windows, and OS X.
 Here's a (likely incomplete) list of dependencies.
 
+- [Swig](http://www.swig.org/) is used to produce a the Java (JNI) and Python
+  wrappers for our C++ code.
 - [Clang](http://clang.llvm.org/) and the JDK are required to compile for Linux.
 - [MinGW-w64](http://mingw-w64.sourceforge.net/) is required to compile to
   compile for Windows.
@@ -33,14 +35,9 @@ Here's a (likely incomplete) list of dependencies.
 
 ## Testing
 
-### Requirements
-
-- [Swig](http://www.swig.org/) is used to produce a Python wrapper for our C++ code.
-
-### Commands
-
 - `./gradlew test` to run python tests.
-- `./gradlew pytnoodle` will produce Swig wrapper code in `build/pytnoodle`.
+- If you want to run tests in `src/test/` directly, you need to run `./gradlew
+  pytnoodle` first to produce the Swig wrapper code in `build/pytnoodle`.
 
 ## Releasing
 
