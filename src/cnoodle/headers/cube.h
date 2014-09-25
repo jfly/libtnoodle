@@ -10,13 +10,18 @@ namespace tnoodle {
 namespace puzzle {
 
 class Cube : public Puzzle {
+protected:
+    char *generateScramble(unsigned int notSolvableInLt, std::mt19937& r);
+    char *drawScramble(char const *scramble, char const **colorScheme);
+    char const **getDefaultColorScheme();
+    char const **getColorSchemeNames();
 public:
     Cube();
+    ~Cube();
     char const *getShortName();
     char const *getLongName();
-    int getWcaNotSolvableInLtFilter();
-    char *generateScramble(int notSolvableInLt, std::mt19937& r);
-    char *drawScramble(char const *scramble, char const **colorScheme);
+    unsigned int getWcaNotSolvableInLtFilter();
+    size_t getColorSchemeNamesCount();
 };
 
 } // puzzle

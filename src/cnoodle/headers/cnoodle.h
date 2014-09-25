@@ -26,7 +26,7 @@ char const *tnoodle_getLongPuzzleName(int puzzleId);
  * Returns a filter limit that could be passed into tnoodle_generateFilteredScramble().
  *         See https://www.worldcubeassociation.org/regulations/#4b3.
  */
-int tnoodle_getWcaNotSolvableInLtFilter(int puzzleId);
+unsigned int tnoodle_getWcaNotSolvableInLtFilter(int puzzleId);
 
 /*
  * puzzleId - see tnoodle_getShortPuzzleNames()
@@ -42,12 +42,12 @@ int tnoodle_getWcaNotSolvableInLtFilter(int puzzleId);
  *         could be passed to drawScramble() to generate an SVG.
  *         The returned pointer can be passed to free().
  */
-char *tnoodle_generateFilteredSeededScramble(int puzzleId, int notSolvableInLt, int64_t seed);
+char *tnoodle_generateFilteredSeededScramble(int puzzleId, unsigned int notSolvableInLt, int64_t seed);
 
 /*
  * Delegates to tnoodle_generateFilteredSeededScramble()
  */
-char *tnoodle_generateFilteredScramble(int puzzleId, int notSolvableInLt);
+char *tnoodle_generateFilteredScramble(int puzzleId, unsigned int notSolvableInLt);
 
 /*
  * Delegates to tnoodle_generateFilteredSeededScramble()
@@ -64,7 +64,7 @@ char *tnoodle_generateScramble(int puzzleId);
  * scramble - turns to apply to solved puzzle. If longer than
  *            MAX_SCRAMBLE_LENGTH, this function must not crash, but
  *            its behavior is undefined.
- * colorScheme - the color scheme to use, see tnoodle_getColorScheme(). If this
+ * colorScheme - the color scheme to use, see tnoodle_getDefaultColorScheme(). If this
  *               contains the wrong number of colors, invalid color names, or
  *               is longer than MAX_COLORSCHEME_LENGTH, this function must not
  *               crash, but its behavior is undefined.
@@ -79,13 +79,13 @@ char *tnoodle_drawScramble(int puzzleId, char *scramble, char *colorScheme);
  * represented as a comma separated string of colors. Each color must be a valid
  * SVG color, see http://www.w3.org/TR/SVG/types.html#DataTypeColor.
  */
-char const *tnoodle_getColorScheme(int puzzleId);
+char const *tnoodle_getDefaultColorScheme(int puzzleId);
 
 /*
  * Returns the names of the various colorable parts of this puzzle (on most
  * puzzles, "parts" means "faces"). This is a comma separated
  * string that must contain the same number of commas as the string returned by
- * tnoodle_getColorScheme(). Consequently, none of the names may contain
+ * tnoodle_getDefaultColorScheme(). Consequently, none of the names may contain
  * commas.
  */
 char const *tnoodle_getColorSchemeNames(int puzzleId);

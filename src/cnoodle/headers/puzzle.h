@@ -11,17 +11,27 @@
 
 class Puzzle {
     protected:
-        virtual char *generateScramble(int notSolvableInLt, std::mt19937& r) = 0;
+        virtual char *generateScramble(unsigned int notSolvableInLt, std::mt19937& r) = 0;
         virtual char *drawScramble(char const *scramble, char const **colorScheme) = 0;
+        virtual char const **getDefaultColorScheme() = 0;
+        virtual char const **getColorSchemeNames() = 0;
+        virtual size_t getColorSchemeNamesCount() = 0;
+    private:
+        char defaultColorSchemeStr[MAX_COLORSCHEME_LENGTH + 1];
+        char defaultColorSchemeStrInitialized = false;
+        char colorSchemeNamesStr[MAX_COLORSCHEME_LENGTH + 1];
+        char colorSchemeNamesStrInitialized = false;
     public:
+        virtual ~Puzzle() = 0;
+
+        char const *getDefaultColorSchemeStr();
+        char const *getColorSchemeNamesStr();
+        char *drawScramble(char const *scramble, char const *colorScheme);
+        char *generateScramble(unsigned int notSolvableInLt, int64_t seed);
+
         virtual char const *getShortName() = 0;
         virtual char const *getLongName() = 0;
-        virtual int getWcaNotSolvableInLtFilter() = 0;
-        char const *getColorScheme();
-        char const *getColorSchemeNames();
-        char *drawScramble(char const *scramble, char const *colorScheme);
-        char *generateScramble(int notSolvableInLt, int64_t seed);
-        virtual ~Puzzle() = 0;
+        virtual unsigned int getWcaNotSolvableInLtFilter() = 0;
 };
 
 #endif // PUZZLE_H
