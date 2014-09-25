@@ -2,6 +2,11 @@
 
 #include <string.h>
 
+Puzzle::Puzzle() {
+    defaultColorSchemeStrInitialized = false;
+    colorSchemeNamesStrInitialized = false;
+}
+
 Puzzle::~Puzzle() {}
 
 static void join(char separator, char const **arr, size_t arrLen, char *dst, size_t dstSize) {

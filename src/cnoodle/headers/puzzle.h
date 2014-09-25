@@ -18,11 +18,12 @@ class Puzzle {
         virtual size_t getColorSchemeNamesCount() = 0;
     private:
         char defaultColorSchemeStr[MAX_COLORSCHEME_LENGTH + 1];
-        char defaultColorSchemeStrInitialized = false;
+        char defaultColorSchemeStrInitialized;
         char colorSchemeNamesStr[MAX_COLORSCHEME_LENGTH + 1];
-        char colorSchemeNamesStrInitialized = false;
+        char colorSchemeNamesStrInitialized;
     public:
         virtual ~Puzzle() = 0;
+        Puzzle();
 
         char const *getDefaultColorSchemeStr();
         char const *getColorSchemeNamesStr();
