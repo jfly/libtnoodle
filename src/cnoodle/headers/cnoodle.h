@@ -3,18 +3,20 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 
 // TODO - get a list of all puzzles? maybe not that useful...
 // TODO - can swig generate java constants for us?
 
-/* 
+/*
  * Returns the short puzzle name for puzzleId.
  * This is "333" instead of "Rubik's Cube".
  */
 char const *tnoodle_getShortPuzzleName(int puzzleId);
 
-/* 
+/*
  * Returns the "long" (human friendly) puzzle name for puzzleId.
  * This is "Rubik's Cube" instead of "333".
  */
@@ -28,12 +30,12 @@ unsigned int tnoodle_getWcaNotSolvableInLtFilter(int puzzleId);
 
 /*
  * puzzleId - see tnoodle_getShortPuzzleNames()
- * notSolvableInLt - Require that the generated scramble 
+ * notSolvableInLt - Require that the generated scramble
  *                   produces a state that is not solvable in less
  *                   than notSolvableInLt moves. Therefore, a value
  *                   of 0 means no filtering. The smaller this number,
  *                   the faster this function will run.
- * seed - If nonzero, seed the random number generator for a 
+ * seed - If nonzero, seed the random number generator for a
  *        reproducible scramble.
  *
  * Returns a string containing a scramble for the given puzzle that
@@ -88,6 +90,8 @@ char const *tnoodle_getDefaultColorScheme(int puzzleId);
  */
 char const *tnoodle_getColorSchemeNames(int puzzleId);
 
-}
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif // CNOODLE_H

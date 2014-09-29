@@ -22,6 +22,10 @@ Here's a (likely incomplete) list of dependencies.
 - [Swig](http://www.swig.org/) is used to produce a the Java (JNI) and Python
   wrappers for our C++ code.
 - [Clang](http://clang.llvm.org/) and the JDK are required to compile for Linux.
+    - Make sure you install the python libclang bindings. On Fedora 18 with
+clang 3.3, I had to run `sudo pip install clang==3.3` ([Read
+this](http://stackoverflow.com/questions/9510474/removing-pips-cache) if you
+think you installed the wrong version.)
 - [MinGW-w64](http://mingw-w64.sourceforge.net/) is required to compile to
   compile for Windows.
 - [https://github.com/tpoechtrager/osxcross](osxcross) needs to be set up to

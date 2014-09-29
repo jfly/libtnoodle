@@ -2,8 +2,6 @@
 #include "puzzle.h"
 #include "cube.h"
 
-#include <random>
-
 static Puzzle *puzzles[] = {
     new tnoodle::puzzle::Cube()
 };

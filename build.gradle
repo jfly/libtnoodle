@@ -176,6 +176,8 @@ model {
                     args << "-g" // debugging symbols
                     args << "-Wall"
                     args << "-I" << "${org.gradle.internal.jvm.Jvm.current().javaHome}/include"
+                    // Note that we assume the python include directories don't
+                    // contain spaces
                     pythonIncludes.toString().split().each { arg ->
                         args << arg
                     }
@@ -227,7 +229,7 @@ task swigpy {
     doLast {
         outputFile.parentFile.mkdirs()
         exec {
-            executable org.gradle.internal.jvm.Jvm.current().getExecutable('swig')
+            executable 'swig'
             args '-o', outputFile
             args '-python'
             args '-builtin'
@@ -243,6 +245,59 @@ task swigpy {
     }
 }
 
+task cwrap {
+    def inputFiles = fileTree("$projectDir/src/cnoodle/")
+    def outputFile = file("$buildDir/tnoodlejs-cwrap.js")
+    inputs.files inputFiles.getFiles()
+    outputs.file outputFile
+    doLast {
+        def os = new FileOutputStream(outputFile)
+        exec {
+            executable "tools/c_to_emscripten.py"
+            args "src/cnoodle/headers/cnoodle.h", "cwrap"
+            standardOutput = os
+        }
+    }
+}
+
+task js {
+    dependsOn cwrap
+
+    def cwrapFile = file("$buildDir/tnoodlejs-cwrap.js")
+
+    def inputFiles = fileTree("$projectDir/src/cnoodle/")
+    def outputFile = file("$buildDir/tnoodle.js")
+    inputs.files inputFiles.getFiles()
+    outputs.file outputFile
+    doLast {
+        outputFile.parentFile.mkdirs()
+
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            executable "tools/c_to_emscripten.py"
+            args "src/cnoodle/headers/cnoodle.h", "exported"
+            standardOutput = stdout
+        }
+        def exportedFunctions = stdout.toString()
+
+        exec {
+            executable 'em++'
+            args '-Wall', '-std=c++11', '-Wno-c++11-narrowing'
+            args '-I', 'src/cnoodle/headers'
+            args '-s', exportedFunctions
+
+            inputFiles.each { f ->
+                def name = f.getName()
+                if(name.endsWith(".c") || name.endsWith("cpp")) {
+                    args f
+                }
+            }
+            args '--post-js', cwrapFile
+            args '-o', outputFile
+        }
+    }
+}
+
 task swigj {
     def inputFile = file("$projectDir/src/jnitnoodle/jnitnoodle.i")
     def outputFile = file("$buildDir/jnitnoodle-sources/jnitnoodle_wrap.cpp")
@@ -251,7 +306,7 @@ task swigj {
     doLast {
         outputFile.parentFile.mkdirs()
         exec {
-            executable org.gradle.internal.jvm.Jvm.current().getExecutable('swig')
+            executable 'swig'
             args '-o', outputFile
             args '-java'
             args '-c++'
@@ -303,7 +358,7 @@ task test(overwrite: true) {
 
     doLast {
         exec {
-            executable org.gradle.internal.jvm.Jvm.current().getExecutable('python3')
+            executable 'python3'
             args '-m', 'unittest'
             args 'discover'
             args '--start-directory', 'src/test'
