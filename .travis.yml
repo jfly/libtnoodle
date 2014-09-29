@@ -50,8 +50,16 @@ install:
     - true
 
 script:
-    # Publish to oss.jfrog.org if our tests pass.
-    - ./gradlew -i test artifactoryPublish
+    # Run tests
+    - ./gradlew -i test
+    # Build a universal jar
+    - ./gradlew -i jar
+    # Build js using emscripten
+    - ./gradlew -i js
+
+after_success:
+    # Publish to oss.jfrog.org if everything passed.
+    - ./gradlew -i artifactoryPublish
 
 after_failure:
     # Dump compiler options used.
