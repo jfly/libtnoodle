@@ -15,6 +15,9 @@ before_install:
     # From http://stackoverflow.com/a/11069162
     - sudo apt-get update
     - sudo apt-get install aptitude
+    #<<<
+    - sudo apt-get install emscripten
+    #<<<
 
     # To compile 32-bit Linux binaries even though we're on 64 bit.
     - sudo aptitude install -y libc6-dev-i386 lib32stdc++6 gcc-multilib g++-multilib
@@ -43,6 +46,12 @@ before_install:
     - make install
     - cd ..
     - export PATH=$HOME/bin:$PATH
+
+    # Install libclang python bindings for tools/c_to_emscripten.py
+    - sudo apt-get install libclang-dev
+    # The python-clang-3.4 package has libclang-3.3.so hardcoded into it, so we
+    # use pip's version instead.
+    - sudo pip install clang==3.4.dev192547
 
 install:
     # Disable default "./gradlew assemble" command.
