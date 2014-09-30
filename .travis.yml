@@ -32,7 +32,9 @@ before_install:
     - git clone --depth=1 https://github.com/tpoechtrager/osxcross
     - cd osxcross
     - (cd tarballs; wget https://dl.dropboxusercontent.com/u/1463845/osxcross/MacOSX10.9.sdk.tar.bz2)
-    - sudo tools/get_dependencies.sh
+    # Piping yes in to deal with failure seen here:
+    # https://travis-ci.org/jfly/libtnoodle/builds/36703105
+    - yes | sudo tools/get_dependencies.sh
     - yes | ./build.sh
     - eval `target/bin/osxcross-env`
     - cd ..
