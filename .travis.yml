@@ -16,6 +16,24 @@ before_install:
     - sudo apt-get -qy update
     - sudo apt-get -qy install aptitude
 
+    # Install Emscripten
+    # There is no package we can apt-get, so we have to compile it ourselves.
+    # However, Emscripten takes quite some time to compile, so I did it once
+    # on a 64 bit Ubuntu 12.04 VM, tar-ed up the relevant binaries, and
+    # uploaded them to Dropbox. Here's how I generated those tar files.
+    # vagrant@precise64:~/emsdk_portable$ cd /home/vagrant/emsdk_portable/emscripten/master/
+    # vagrant@precise64:~/emsdk_portable/emscripten/master$ tar zcvf emscripten_ubuntu1204.tar.gz *
+    # vagrant@precise64:~/emsdk_portable$ cd /home/vagrant/emsdk_portable/clang/fastcomp/build_master_64/bin/
+    # vagrant@precise64:~/emsdk_portable/clang/fastcomp/build_master_64/bin$ tar zcvf fastcomp_ubuntu1204.tar.gz *
+
+    - cp tools/.emscripten ~/.emscripten
+    - wget https://dl.dropboxusercontent.com/u/1463845/osxcross/emscripten_ubuntu1204.tar.gz
+    - wget https://dl.dropboxusercontent.com/u/1463845/osxcross/fastcomp_ubuntu1204.tar.gz
+    - mkdir /tmp/em
+    - tar xf emscripten_ubuntu1204.tar.gz -C /tmp/em
+    - tar xf fastcomp_ubuntu1204.tar.gz -C /tmp/em
+    - 'export PATH=$PATH:/tmp/em'
+   
     # To compile 32-bit Linux binaries even though we're on 64 bit.
     - sudo aptitude install -y libc6-dev-i386 lib32stdc++6 gcc-multilib g++-multilib
 
@@ -49,13 +67,6 @@ before_install:
     # The python-clang-3.4 package has libclang-3.3.so hardcoded into it, so we
     # use pip's version instead.
     - sudo pip install clang==3.4.dev192547
-
-    # Install Emscripten
-    # Set up repository for Emscripten
-    # http://www.installion.co.uk/ubuntu/trusty/universe/e/emscripten/en/install/index.html
-    - sudo bash -c "echo deb http://us.archive.ubuntu.com/ubuntu trusty main universe >> /etc/apt/sources.list"
-    - sudo apt-get -qy update
-    - sudo apt-get -qy install emscripten
 
 install:
     # Disable default "./gradlew assemble" command.

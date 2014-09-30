@@ -1,0 +1,11 @@
+import os
+SPIDERMONKEY_ENGINE = ''
+NODE_JS = 'node'
+#LLVM_ROOT='/home/vagrant/emsdk_portable/clang/fastcomp/build_master_64/bin'
+#EMSCRIPTEN_ROOT='/home/vagrant/emsdk_portable/emscripten/master'
+LLVM_ROOT='/tmp/em'
+EMSCRIPTEN_ROOT='/tmp/em'
+V8_ENGINE = ''
+TEMP_DIR = '/tmp'
+COMPILER_ENGINE = NODE_JS
+JS_ENGINES = [NODE_JS]
