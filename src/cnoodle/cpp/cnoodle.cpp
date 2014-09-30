@@ -2,9 +2,13 @@
 #include "puzzle.h"
 #include "cube.h"
 
-static Puzzle *puzzles[] = {
+static Puzzle *puzzles[MAX_PUZZLEID + 1] = {
+    new tnoodle::puzzle::Cube(),
     new tnoodle::puzzle::Cube()
 };
+
+//<<<puzzles[PUZZLE_333] = new tnoodle::puzzle::Cube(3);
+//<<<puzzles[PUZZLE_222] = new tnoodle::puzzle::Cube(2);
 
 char const *tnoodle_getShortPuzzleName(int puzzleId) {
     return puzzles[puzzleId]->getShortName();

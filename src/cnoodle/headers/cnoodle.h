@@ -7,6 +7,10 @@
 extern "C" {
 #endif
 
+#define PUZZLE_333 0
+#define PUZZLE_222 1
+#define MAX_PUZZLEID 1
+
 // TODO - get a list of all puzzles? maybe not that useful...
 // TODO - can swig generate java constants for us?
 

@@ -12,12 +12,15 @@ env:
         - secure: "bsAUSuyK5j7CvTtuGhYZlvg3KIz7vQKtPVae7hkYfRbWUJRUs+XO/1KEYqZajVsBNTHItN6uTr64t5MF9PExYA0smJLtYzBGjrejlB1Z7V14d7+1mvqE1luI9OtrEG713v9UTGN4Pa5OXpHBvpJTcsT/ep6IkfkXcLVUF64JOwY="
 
 before_install:
+    # Set up repository for Emscripten
+    # http://www.installion.co.uk/ubuntu/trusty/universe/e/emscripten/en/install/index.html
+    - sudo bash -c "echo deb http://us.archive.ubuntu.com/ubuntu trusty main universe >> /etc/apt/sources.list"
     # From http://stackoverflow.com/a/11069162
-    - sudo apt-get update
-    - sudo apt-get install aptitude
-    #<<<
-    - sudo apt-get install emscripten
-    #<<<
+    - sudo apt-get -qy update
+    - sudo apt-get -qy install aptitude
+
+    # Install Emscripten
+    - sudo apt-get -qy install emscripten
 
     # To compile 32-bit Linux binaries even though we're on 64 bit.
     - sudo aptitude install -y libc6-dev-i386 lib32stdc++6 gcc-multilib g++-multilib
@@ -37,8 +40,8 @@ before_install:
     # Install swig3 so we can run tests
     # Copied from https://github.com/ilveroluca/rapi/commit/bc3d55b74f9d31fff5f5120b5e32a675b1934f1c
     #- sudo apt-get -qq install swig
-    - sudo apt-get -qq install python3-dev
-    - sudo apt-get install libpcre3-dev
+    - sudo apt-get -qy install python3-dev
+    - sudo apt-get -qy install libpcre3-dev
     - wget http://prdownloads.sourceforge.net/swig/swig-3.0.2.tar.gz -O - | tar xzf -
     - cd swig-3.0.2/
     - ./configure -prefix=$HOME --without-alllang --with-python
@@ -48,7 +51,7 @@ before_install:
     - export PATH=$HOME/bin:$PATH
 
     # Install libclang python bindings for tools/c_to_emscripten.py
-    - sudo apt-get install libclang-dev
+    - sudo apt-get -qy install libclang-dev
     # The python-clang-3.4 package has libclang-3.3.so hardcoded into it, so we
     # use pip's version instead.
     - sudo pip install clang==3.4.dev192547
