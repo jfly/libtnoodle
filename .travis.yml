@@ -19,9 +19,6 @@ before_install:
     - sudo apt-get -qy update
     - sudo apt-get -qy install aptitude
 
-    # Install Emscripten
-    - sudo apt-get -qy install emscripten
-
     # To compile 32-bit Linux binaries even though we're on 64 bit.
     - sudo aptitude install -y libc6-dev-i386 lib32stdc++6 gcc-multilib g++-multilib
 
@@ -32,12 +29,13 @@ before_install:
     - git clone --depth=1 https://github.com/tpoechtrager/osxcross
     - cd osxcross
     - (cd tarballs; wget https://dl.dropboxusercontent.com/u/1463845/osxcross/MacOSX10.9.sdk.tar.bz2)
-    # Piping yes in to deal with failure seen here:
-    # https://travis-ci.org/jfly/libtnoodle/builds/36703105
-    - yes | sudo tools/get_dependencies.sh
+    - sudo tools/get_dependencies.sh
     - yes | ./build.sh
     - eval `target/bin/osxcross-env`
     - cd ..
+
+    # Install Emscripten
+    - sudo apt-get -qy install emscripten
 
     # Install swig3 so we can run tests
     # Copied from https://github.com/ilveroluca/rapi/commit/bc3d55b74f9d31fff5f5120b5e32a675b1934f1c
