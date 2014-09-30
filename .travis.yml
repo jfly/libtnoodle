@@ -12,9 +12,6 @@ env:
         - secure: "bsAUSuyK5j7CvTtuGhYZlvg3KIz7vQKtPVae7hkYfRbWUJRUs+XO/1KEYqZajVsBNTHItN6uTr64t5MF9PExYA0smJLtYzBGjrejlB1Z7V14d7+1mvqE1luI9OtrEG713v9UTGN4Pa5OXpHBvpJTcsT/ep6IkfkXcLVUF64JOwY="
 
 before_install:
-    # Set up repository for Emscripten
-    # http://www.installion.co.uk/ubuntu/trusty/universe/e/emscripten/en/install/index.html
-    - sudo bash -c "echo deb http://us.archive.ubuntu.com/ubuntu trusty main universe >> /etc/apt/sources.list"
     # From http://stackoverflow.com/a/11069162
     - sudo apt-get -qy update
     - sudo apt-get -qy install aptitude
@@ -34,9 +31,6 @@ before_install:
     - eval `target/bin/osxcross-env`
     - cd ..
 
-    # Install Emscripten
-    - sudo apt-get -qy install emscripten
-
     # Install swig3 so we can run tests
     # Copied from https://github.com/ilveroluca/rapi/commit/bc3d55b74f9d31fff5f5120b5e32a675b1934f1c
     #- sudo apt-get -qq install swig
@@ -55,6 +49,13 @@ before_install:
     # The python-clang-3.4 package has libclang-3.3.so hardcoded into it, so we
     # use pip's version instead.
     - sudo pip install clang==3.4.dev192547
+
+    # Install Emscripten
+    # Set up repository for Emscripten
+    # http://www.installion.co.uk/ubuntu/trusty/universe/e/emscripten/en/install/index.html
+    - sudo bash -c "echo deb http://us.archive.ubuntu.com/ubuntu trusty main universe >> /etc/apt/sources.list"
+    - sudo apt-get -qy update
+    - sudo apt-get -qy install emscripten
 
 install:
     # Disable default "./gradlew assemble" command.
