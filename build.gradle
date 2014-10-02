@@ -251,6 +251,7 @@ task cwrap {
     inputs.files inputFiles.getFiles()
     outputs.file outputFile
     doLast {
+        outputFile.parentFile.mkdirs()
         def os = new FileOutputStream(outputFile)
         exec {
             executable "tools/c_to_emscripten.py"
@@ -266,7 +267,7 @@ task js {
     def cwrapFile = file("$buildDir/tnoodlejs-cwrap.js")
 
     def inputFiles = fileTree("$projectDir/src/cnoodle/")
-    def outputFile = file("$buildDir/tnoodle.js")
+    def outputFile = file("$buildDir/tnoodle-${version}.js")
     inputs.files inputFiles.getFiles()
     outputs.file outputFile
     doLast {
@@ -278,7 +279,7 @@ task js {
             args "src/cnoodle/headers/cnoodle.h", "exported"
             standardOutput = stdout
         }
-        def exportedFunctions = stdout.toString()
+        def exportedFunctions = stdout.toString().trim()
 
         exec {
             executable 'em++'
