@@ -8,6 +8,7 @@ from clang.cindex import TypeKind
 from clang.cindex import CursorKind
 
 Function = collections.namedtuple('Function', ['name', 'returnType', 'argumentTypes'])
+Constant = collections.namedtuple('Constant', ['name', 'value'])
 
 def getJavascriptType(t):
     if t.kind == TypeKind.TYPEDEF:
@@ -23,20 +24,33 @@ def getJavascriptType(t):
     else:
         assert False # unrecognized type
 
-def getFunctions(node):
+def getFunctionsAndConstants(node, filename):
     if node.kind == CursorKind.FUNCTION_DECL:
         args = []
         for arg in node.get_arguments():
             jsType = getJavascriptType(arg.type)
             args.append(jsType)
         jsReturnType = getJavascriptType(node.result_type)
-        return [ Function( node.spelling, jsReturnType, args ) ]
+        return [ Function( node.spelling, jsReturnType, args ) ], []
+    elif node.kind == CursorKind.MACRO_DEFINITION:
+        if node.location.file is not None and node.location.file.name == filename:
+            tokens = list(node.get_tokens())
+            # We're only interested in stuff like
+            #  #define PI 3.14
+            # not
+            #  #define CNOODLE_H
+            if len(tokens) == 3:
+                identifier, literal, hsh = tokens
+                return [], [ Constant(identifier.spelling, literal.spelling) ]
 
     # Recurse for children of this node
     funcs = []
+    consts = []
     for c in node.get_children():
-        funcs += getFunctions(c)
-    return funcs
+        fs, cs = getFunctionsAndConstants(c, filename)
+        funcs += fs
+        consts += cs
+    return funcs, consts
 
 def main():
     parser = argparse.ArgumentParser(description='Produce Emscripten wrapper code for a C header file.')
@@ -45,13 +59,13 @@ def main():
     args = parser.parse_args()
 
     index = clang.cindex.Index.create()
-    tu = index.parse(args.file.name)
-    funcs = getFunctions(tu.cursor)
+    tu = index.parse(args.file.name, options=clang.cindex.TranslationUnit.PARSE_DETAILED_PROCESSING_RECORD)
+    funcs, consts = getFunctionsAndConstants(tu.cursor, args.file.name)
     if args.action == "cwrap":
         prefixes = set()
         js = ""
         for f in funcs:
-            prefix, shortName = f.name.split("_")
+            prefix, shortName = f.name.split("_", 1)
             prefixes.add(prefix)
             funcData = {}
             funcData['prefix'] = prefix
@@ -60,6 +74,15 @@ def main():
             funcData['returnType'] = f.returnType
             funcData['argumentTypes'] = json.dumps(f.argumentTypes)
             js += '{prefix}.{shortName} = Module.cwrap("{name}", "{returnType}", {argumentTypes});\n'.format(**funcData)
+        for c in consts:
+            prefix, shortName = c.name.split("_", 1)
+            prefix = prefix.lower()
+            constData = {
+                'prefix': prefix,
+                'shortName': shortName,
+                'value': c.value,
+            }
+            js += "{prefix}.{shortName} = {value};\n".format(**constData)
         for prefix in prefixes:
             js = "var {0} = {0} || {{}};\n".format(prefix) + js
         print js,

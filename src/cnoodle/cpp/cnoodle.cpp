@@ -4,17 +4,17 @@
 
 #include <assert.h>
 
-static Puzzle *puzzles[MAX_PUZZLEID + 1] = { NULL };
+static Puzzle *puzzles[TNOODLE_MAX_PUZZLEID + 1] = { NULL };
 
 static bool initialize() {
-    puzzles[PUZZLE_333] = new tnoodle::puzzle::Cube();
-    puzzles[PUZZLE_222] = new tnoodle::puzzle::Cube();
+    puzzles[TNOODLE_PUZZLE_333] = new tnoodle::puzzle::Cube();
+    puzzles[TNOODLE_PUZZLE_222] = new tnoodle::puzzle::Cube();
     return true;
 }
 static bool initialized = initialize();
 
 bool tnoodle_isValidPuzzleId(int puzzleId) {
-    if(puzzleId < MIN_PUZZLEID || puzzleId > MAX_PUZZLEID) {
+    if(puzzleId < TNOODLE_MIN_PUZZLEID || puzzleId > TNOODLE_MAX_PUZZLEID) {
         return false;
     }
     return puzzles[puzzleId] != NULL;

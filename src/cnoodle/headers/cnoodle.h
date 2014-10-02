@@ -7,10 +7,10 @@
 extern "C" {
 #endif
 
-#define PUZZLE_333 0
-#define PUZZLE_222 1
-#define MIN_PUZZLEID 0
-#define MAX_PUZZLEID 1
+#define TNOODLE_PUZZLE_333 0
+#define TNOODLE_PUZZLE_222 1
+#define TNOODLE_MIN_PUZZLEID 0
+#define TNOODLE_MAX_PUZZLEID 1
 
 /*
  * Returns true if the given puzzleId is valid. Not all puzzle ids that are in
