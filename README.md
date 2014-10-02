@@ -41,6 +41,7 @@ Travis CI's 64 bit Ubuntu 12.04 environment.
 
 - `./gradlew jar` produces build/libs/jtnoodle-VERSION.jar.
 - `./gradlew run` runs main.cpp (this may be removed in the future).
+- `./gradlew js` produces build/tnoodle.js.
 
 ### Testing
 
