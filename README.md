@@ -16,21 +16,26 @@ project that uses jtnoodle.
 
 ### Requirements
 
-A properly configured Linux machine can compile binaries for Linux, Windows, and OS X.
-Here's a (likely incomplete) list of dependencies.
-
-- [Swig](http://www.swig.org/) is used to produce a the Java (JNI) and Python
+- [Swig](http://www.swig.org/) is used to produce the Java (JNI) and Python
   wrappers for our C++ code.
 - [Clang](http://clang.llvm.org/) and the JDK are required to compile for Linux.
     - Make sure you install the python libclang bindings. On Fedora 18 with
 clang 3.3, I had to run `sudo pip install clang==3.3` ([Read
 this](http://stackoverflow.com/questions/9510474/removing-pips-cache) if you
 think you installed the wrong version.)
+
+A properly configured Linux machine can cross-compile binaries for Windows and
+OS X as well.
+
 - [MinGW-w64](http://mingw-w64.sourceforge.net/) is required to compile to
   compile for Windows.
 - [https://github.com/tpoechtrager/osxcross](osxcross) needs to be set up to
   compile for OS X. You must set the MACOSX_DEPLOYMENT_TARGET environment
   variable to 10.9 (MACOSX_DEPLOYMENT_TARGET=10.9)!
+
+If you have trouble setting up a development environment, it might be worth
+checking out `.travis.yml`, which has all the commands to set things up for
+Travis CI's 64 bit Ubuntu 12.04 environment.
 
 ### Building
 
