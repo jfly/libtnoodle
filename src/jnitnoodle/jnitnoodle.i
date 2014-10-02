@@ -5,8 +5,7 @@
 %}
 
 # Remove all "tnoodle_" prefixes.
-%rename("%(strip:[tnoodle_])s") "";
-%rename("%(strip:[TNOODLE_])s") "";
+%rename("%(regex:/^(tnoodle|TNOODLE)_(.*)$/\\2/)s") "";
 
 # Generate compiler constants, rather than runtime constants.
 %javaconst(1);
