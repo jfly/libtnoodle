@@ -7,6 +7,10 @@
 # Remove all "tnoodle_" prefixes.
 %rename("%(strip:[tnoodle_])s") "";
 
+# Generate compiler constants, rather than runtime constants.
+%javaconst(1);
+
+
 %include "stdint.i"
 
 %include "cnoodle.h"

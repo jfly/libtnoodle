@@ -9,10 +9,15 @@ extern "C" {
 
 #define PUZZLE_333 0
 #define PUZZLE_222 1
+#define MIN_PUZZLEID 0
 #define MAX_PUZZLEID 1
 
-// TODO - get a list of all puzzles? maybe not that useful...
-// TODO - can swig generate java constants for us?
+/*
+ * Returns true if the given puzzleId is valid. Not all puzzle ids that are in
+ * [ MIN_PUZZLEID, MAX_PUZZLEID ] are necessarily valid. Puzzles may be removed
+ * over time, but we will never change the puzzle id for a puzzle.
+ */
+bool tnoodle_isValidPuzzleId(int puzzleId);
 
 /*
  * Returns the short puzzle name for puzzleId.
